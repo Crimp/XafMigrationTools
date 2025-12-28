@@ -27,6 +27,7 @@ namespace XafApiConverter.Converter {
         /// Default: false (normal mode with automatic commenting for non-protected classes).
         /// </summary>
         public bool CommentIssuesOnly { get; set; } = false;
+        bool initialized = false;
         public TypeMigrationTool(string solutionPath, MigrationOptions options) {
             _options = options;
             _solutionPath = solutionPath;
@@ -34,37 +35,58 @@ namespace XafApiConverter.Converter {
             _semanticCache = new SemanticCache();
         }
 
-        public MigrationReport RunMigration() {
-            Console.WriteLine("Starting Type Migration...");
+        public void Initialize() {
+            if(initialized) return;
+            Console.WriteLine("Type Migration initializing...");
+            initialized = true;
+            // Initialization logic if needed
+            // Phase 1: Load solution
+            Console.WriteLine($"Phase 1: Loading solution {Path.GetFileName(_solutionPath)}...");
+            LoadSolution();
+
+            // Phase 1.5: Build semantic cache of original state
+            Console.WriteLine("Phase 1.5: Building semantic cache...");
+            BuildSemanticCache();
+        }
+
+        public MigrationReport CommentOutProblematicClasses() {
+            Console.WriteLine("Starting Type Migration - comment ot problematic classes...");
             Console.WriteLine();
 
             try {
-                // Phase 1: Load solution
-                Console.WriteLine($"Phase 1: Loading solution {Path.GetFileName(_solutionPath)}...");
-                LoadSolution();
-
-                // Phase 1.5: Build semantic cache of original state
-                Console.WriteLine("Phase 1.5: Building semantic cache...");
-                BuildSemanticCache();
-
                 // Phase 2: Detect and comment out problematic classes FIRST (before changing usings!)
                 // This allows using directives analysis to work correctly for namespace resolution
-                Console.WriteLine("Phase 2: Detecting and commenting out problematic classes...");
+                Console.WriteLine("Phase 2.1: Detecting and commenting out problematic classes...");
                 DetectProblems();
-                CommentOutProblematicClasses();
-
-                // Phase 3: Apply automatic replacements (usings + types)
-                // Now it's safe to change usings since problematic classes are already commented
-                Console.WriteLine("Phase 3: Applying automatic replacements...");
-                ApplyAutomaticReplacements();
-
-                // Phase 4: Build project
-                Console.WriteLine("Phase 4: Building project...");
+                CommentOutProblematicClassesCore();
+                                
+                // Phase 3: Build project
+                Console.WriteLine("Phase 3: Building project...");
                 BuildErrorAnalysis.BuildAndAnalyzeErrors(_solutionPath, _report, _solution);
 
-                // Phase 5: Generate report
-                Console.WriteLine("Phase 5: Generating report...");
-                SaveReport();
+                Console.WriteLine();
+                Console.WriteLine("[OK] Migration analysis complete!");
+                _report.PrintSummary();
+
+                return _report;
+            } catch(Exception ex) {
+                Console.WriteLine($"[ERROR] Migration failed: {ex.Message}");
+                throw;
+            }
+        }
+        public MigrationReport ApplyingAutomaticReplacements() {
+            Console.WriteLine("Starting Type Migration - applying automatic replacements...");
+            Console.WriteLine();
+
+            try {
+                // Phase 2: Apply automatic replacements (usings + types)
+                // Now it's safe to change usings since problematic classes are already commented
+                Console.WriteLine("Phase 2.2: Applying automatic replacements...");
+                ApplyAutomaticReplacements();
+
+                // Phase 3: Build project
+                Console.WriteLine("Phase 3: Building project...");
+                BuildErrorAnalysis.BuildAndAnalyzeErrors(_solutionPath, _report, _solution);
 
                 Console.WriteLine();
                 Console.WriteLine("[OK] Migration analysis complete!");
@@ -597,14 +619,13 @@ namespace XafApiConverter.Converter {
                 "type-migration-report.md");
 
             _report.SaveToFile(reportPath);
-            Console.WriteLine($"  Report saved to: {reportPath}");
         }
 
         /// <summary>
         /// Phase 6: Comment out problematic classes automatically
         /// Implements TRANS-010 lightweight version
         /// </summary>
-        private void CommentOutProblematicClasses() {
+        private void CommentOutProblematicClassesCore() {
             var commenter = new ClassCommenter(_report, _options, _semanticCache);
             var commentedCount = commenter.CommentOutProblematicClasses();
 

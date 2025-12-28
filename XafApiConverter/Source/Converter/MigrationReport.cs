@@ -74,8 +74,8 @@ namespace XafApiConverter.Converter {
             sb.AppendLine();
             sb.AppendLine("**Type Replacements:**");
             sb.AppendLine("- `WebApplication` → `BlazorApplication`");
-            sb.AppendLine("- `ASPxGridListEditor` → `DxGridListEditor`");
-            sb.AppendLine("- `ASPxLookupPropertyEditor` → `LookupPropertyEditor`");
+            //sb.AppendLine("- `ASPxGridListEditor` → `DxGridListEditor`");
+            //sb.AppendLine("- `ASPxLookupPropertyEditor` → `LookupPropertyEditor`");
             sb.AppendLine("- `*AspNetModule` → `*BlazorModule`");
             sb.AppendLine();
 
@@ -353,6 +353,7 @@ namespace XafApiConverter.Converter {
 
             //var markdown = ToMarkdown();
             //File.WriteAllText(filePath, markdown, Encoding.UTF8);
+            //Console.WriteLine($"  Report saved to: {filePath}");
         }
 
         /// <summary>

@@ -27,9 +27,8 @@ XAF v25.2 discontinued support for:
 **XafApiConverter** is an automated tool that performs the following tasks:
 
 1. **Security API Update Assistance** (SecuritySystem* → PermissionPolicy*)
-2. **Type and Namespace Migration** where possible (Web Forms → Blazor)
-3. **Project Conversion** (.NET Framework → .NET SDK-style)
-4. **Automatic Commenting** of problematic classes
+2. **Automatic Commenting** of problematic classes
+3. **Project Conversion** (.NET Framework → .NET SDK-style) + **Type and Namespace Migration** where possible (Web Forms → Blazor)
 
 **⚠️ IMPORTANT**: First, you need to update your project to **XAF v25.1**, then perform the .NET Framework → .NET migration on v25.1 using XafApiConverter. Verify the application works correctly. Only after that proceed to v25.2.
 
@@ -164,10 +163,6 @@ Examples:
 **Step 2: Type Migration (Web → Blazor)**
 
 **Automatically:**
-- Migrate `System.Data.SqlClient` → `Microsoft.Data.SqlClient`
-- Migrate `DevExpress.ExpressApp.Web.*` → `Blazor.*`
-- Replace types (`WebApplication` → `BlazorApplication`, etc.)
-- Process `.cs` and `.xafml` files
 - Mark or comment out problematic classes
 
 **Requires manual analysis:**
@@ -182,6 +177,11 @@ Examples:
 - Adds NuGet packages (BASE/WINDOWS/BLAZOR_WEB) if needed
 - Removes legacy assembly references
 - Validates converted projects
+- 
+- Migrate `System.Data.SqlClient` → `Microsoft.Data.SqlClient`
+- Migrate `DevExpress.ExpressApp.Web.*` → `Blazor.*`
+- Replace types (`WebApplication` → `BlazorApplication`, etc.)
+- Process `.cs` and `.xafml` files
 
 ### 4.3. Type Migration Modes
 

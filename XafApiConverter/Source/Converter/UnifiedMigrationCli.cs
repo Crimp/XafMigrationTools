@@ -309,6 +309,7 @@ namespace XafApiConverter.Converter {
                         stepNumber++;
                     }
 
+                    TypeMigrationTool typeMigrationTool = null;
                     // Step 2: Type Migration (Web -> Blazor)
                     if (options.ExecuteTypeMigration) {
                         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -316,8 +317,22 @@ namespace XafApiConverter.Converter {
                         Console.ResetColor();
                         Console.WriteLine();
 
-                        var typeMigrationResult = RunTypeMigration(solutionPath, options);
-                        if (typeMigrationResult != 0) {
+                        if(typeMigrationTool == null) {
+                            typeMigrationTool = new TypeMigrationTool(solutionPath, options);
+                            typeMigrationTool.Initialize();
+                        }
+
+                        int resultState = 0;
+                        try {
+                            resultState = typeMigrationTool.CommentOutProblematicClasses().ProblematicClasses.Any() ? 1 : 0;
+                        } catch(Exception ex) {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"Type migration failed: {ex.Message}");
+                            Console.ResetColor();
+                            resultState = 1;
+                        }
+
+                        if (resultState != 0) {
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine($"[WARNING] Step {stepNumber} completed with warnings");
                             Console.ResetColor();
@@ -339,6 +354,13 @@ namespace XafApiConverter.Converter {
                         Console.WriteLine();
 
                         var conversionResult = RunProjectConversion(solutionPath, options);
+
+                        if(typeMigrationTool == null) {
+                            typeMigrationTool = new TypeMigrationTool(solutionPath, options);
+                            typeMigrationTool.Initialize();
+                        }
+                        typeMigrationTool.ApplyingAutomaticReplacements();
+
                         if (conversionResult != 0) {
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine($"[WARNING] Step {stepNumber} completed with warnings");
@@ -350,6 +372,17 @@ namespace XafApiConverter.Converter {
                             Console.ResetColor();
                         }
                         Console.WriteLine();
+                    }
+                    // Save type migration report if applicable
+                    if(typeMigrationTool != null) {
+                        var report = typeMigrationTool.GetReport();
+                        if (report.ProblematicClasses.Any()) {
+                            PrintNextSteps(report);
+                        }
+                        var reportPath = options.OutputPath ?? Path.Combine(
+                            Path.GetDirectoryName(solutionPath),
+                            "type-migration-report.md");
+                        report.SaveToFile(reportPath);
                     }
                 }
                 catch (Exception ex) {
@@ -485,39 +518,6 @@ namespace XafApiConverter.Converter {
             }
 
             return projects;
-        }
-
-        private static int RunTypeMigration(string solutionPath, MigrationOptions options) {
-            try {
-                // Create migration tool with merged options
-                var tool = new TypeMigrationTool(solutionPath, options) {
-                    CommentIssuesOnly = options.CommentIssuesOnly
-                };
-
-                var report = tool.RunMigration();
-
-                // Save report
-                var reportPath = options.OutputPath ?? Path.Combine(
-                    Path.GetDirectoryName(solutionPath),
-                    "type-migration-report.md");
-                report.SaveToFile(reportPath);
-
-                Console.WriteLine($"Report saved to: {reportPath}");
-                Console.WriteLine();
-
-                // Print next steps if there are problematic classes
-                if (report.ProblematicClasses.Any()) {
-                    PrintNextSteps(report);
-                }
-
-                return report.ProblematicClasses.Any() ? 1 : 0;
-            }
-            catch (Exception ex) {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Type migration failed: {ex.Message}");
-                Console.ResetColor();
-                return 1;
-            }
         }
 
         private static void PrintNextSteps(MigrationReport report) {

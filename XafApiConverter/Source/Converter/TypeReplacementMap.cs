@@ -188,12 +188,12 @@ namespace XafApiConverter.Converter {
             //    "DevExpress.ExpressApp.Blazor.Editors",
             //    "ASPx grid to Dx grid") },
 
-            { "ASPxLookupPropertyEditor", new TypeReplacement(
-                "ASPxLookupPropertyEditor",
-                "LookupPropertyEditor",
-                "DevExpress.ExpressApp.Web.Editors.ASPx",
-                "DevExpress.ExpressApp.Blazor.Editors",
-                "ASPx lookup to Blazor lookup") },
+            //{ "ASPxLookupPropertyEditor", new TypeReplacement(
+            //    "ASPxLookupPropertyEditor",
+            //    "LookupPropertyEditor",
+            //    "DevExpress.ExpressApp.Web.Editors.ASPx",
+            //    "DevExpress.ExpressApp.Blazor.Editors",
+            //    "ASPx lookup to Blazor lookup") },
 
             // Controller Types
             { "WebModificationsController", new TypeReplacement(
