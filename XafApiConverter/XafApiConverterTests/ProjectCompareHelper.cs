@@ -18,7 +18,7 @@ namespace XafApiConverterTests {
             return tempDir;
         }
 
-        public static string FindProjectDirectory(string projectDirectoryName) {
+        public static string FindSolutionDirectory(string projectDirectoryName) {
             string dir = Path.GetDirectoryName(typeof(ProjectCompareHelper).Assembly.Location)!;
             while (true) {
                 string projectDir = Path.Combine(dir, projectDirectoryName);

@@ -15,6 +15,87 @@ namespace XafApiConverter.Converter {
         private static bool _isInitialized = false;
 
         /// <summary>
+        /// Package replacements (Web → Blazor migration)
+        /// </summary>
+        public static readonly Dictionary<string, PackageReplacement> PackageReplacements = new(StringComparer.OrdinalIgnoreCase) {
+            // Web → Blazor module packages
+            { "DevExpress.ExpressApp.Dashboards.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.Dashboards.Web",
+                "DevExpress.ExpressApp.Dashboards.Blazor",
+                "Dashboards Web to Blazor migration") },
+
+            { "DevExpress.ExpressApp.Office.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.Office.Web",
+                "DevExpress.ExpressApp.Office.Blazor",
+                "Office Web to Blazor migration") },
+
+            { "DevExpress.ExpressApp.ReportsV2.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.ReportsV2.Web",
+                "DevExpress.ExpressApp.ReportsV2.Blazor",
+                "Reports Web to Blazor migration") },
+
+            { "DevExpress.ExpressApp.Validation.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.Validation.Web",
+                "DevExpress.ExpressApp.Validation.Blazor",
+                "Validation Web to Blazor migration") },
+
+            { "DevExpress.ExpressApp.FileAttachment.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.FileAttachment.Web",
+                "DevExpress.ExpressApp.FileAttachment.Blazor",
+                "FileAttachment Web to Blazor migration") },
+
+            { "DevExpress.ExpressApp.Scheduler.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.Scheduler.Web",
+                "DevExpress.ExpressApp.Scheduler.Blazor",
+                "Scheduler Web to Blazor migration") },
+        };
+
+        /// <summary>
+        /// Packages that have NO equivalent and should be removed
+        /// </summary>
+        public static readonly Dictionary<string, PackageReplacement> NoEquivalentPackages = new(StringComparer.OrdinalIgnoreCase) {
+            { "DevExpress.ExpressApp.Maps.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.Maps.Web",
+                null,
+                "Maps.Web has no Blazor equivalent - should be removed") },
+
+            { "DevExpress.ExpressApp.Chart.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.Chart.Web",
+                null,
+                "Chart.Web has no Blazor equivalent - should be removed") },
+
+            { "DevExpress.ExpressApp.PivotGrid.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.PivotGrid.Web",
+                null,
+                "PivotGrid.Web has no Blazor equivalent - should be removed") },
+
+            { "DevExpress.ExpressApp.PivotChart.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.PivotChart.Web",
+                null,
+                "PivotChart.Web has no Blazor equivalent - should be removed") },
+
+            { "DevExpress.ExpressApp.ScriptRecorder", new PackageReplacement(
+                "DevExpress.ExpressApp.ScriptRecorder",
+                null,
+                "ScriptRecorder has no .NET equivalent - should be removed") },
+
+            { "DevExpress.ExpressApp.ScriptRecorder.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.ScriptRecorder.Web",
+                null,
+                "ScriptRecorder.Web has no Blazor equivalent - should be removed") },
+
+            { "DevExpress.ExpressApp.Kpi", new PackageReplacement(
+                "DevExpress.ExpressApp.Kpi",
+                null,
+                "Kpi has no .NET equivalent - should be removed") },
+
+            { "DevExpress.ExpressApp.Workflow", new PackageReplacement(
+                "DevExpress.ExpressApp.Workflow",
+                null,
+                "Workflow has no .NET equivalent - should be removed") },
+        };
+
+        /// <summary>
         /// Namespace replacements (TRANS-006, TRANS-007)
         /// </summary>
         public static readonly Dictionary<string, NamespaceReplacement> NamespaceReplacements = new() {
@@ -763,6 +844,31 @@ namespace XafApiConverter.Converter {
         }
 
         /// <summary>
+        /// Get all package replacements (both normal and NO_EQUIVALENT)
+        /// </summary>
+        public static IEnumerable<PackageReplacement> GetAllPackageReplacements() {
+            EnsureInitialized();
+            return PackageReplacements.Values.Concat(NoEquivalentPackages.Values);
+        }
+
+        /// <summary>
+        /// Try to get package replacement
+        /// </summary>
+        public static bool TryGetPackageReplacement(string packageName, out PackageReplacement replacement) {
+            EnsureInitialized();
+            return PackageReplacements.TryGetValue(packageName, out replacement) ||
+                   NoEquivalentPackages.TryGetValue(packageName, out replacement);
+        }
+
+        /// <summary>
+        /// Check if package should be removed (has no equivalent)
+        /// </summary>
+        public static bool ShouldRemovePackage(string packageName) {
+            EnsureInitialized();
+            return NoEquivalentPackages.ContainsKey(packageName);
+        }
+
+        /// <summary>
         /// Check if a type requires commenting out entire class
         /// </summary>
         public static bool RequiresCommentOutClass(string typeName) {
@@ -873,6 +979,25 @@ namespace XafApiConverter.Converter {
             int loadedFromFile = total - manuallyDefined;
 
             return (manuallyDefined, loadedFromFile, total);
+        }
+    }
+
+    /// <summary>
+    /// Package replacement information
+    /// </summary>
+    internal class PackageReplacement {
+        public string OldPackage { get; }
+        public string NewPackage { get; }
+        public string Description { get; }
+        public bool HasEquivalent => NewPackage != null;
+
+        public PackageReplacement(
+            string oldPackage,
+            string newPackage,
+            string description) {
+            OldPackage = oldPackage;
+            NewPackage = newPackage;
+            Description = description;
         }
     }
 

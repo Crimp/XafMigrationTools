@@ -11,8 +11,8 @@ namespace XafApiConverterTests {
         [Fact]
         [Trait("Category", "Integration")]
         public void FullPipeline_Conversion_And_TypeMigration() {
-            string projectToConvert = ProjectCompareHelper.FindProjectDirectory("XafApiConverter.TestProject");
-            string projectEtalon = ProjectCompareHelper.FindProjectDirectory("XafApiConverter.TestProject.Etalon");
+            string projectToConvert = ProjectCompareHelper.FindSolutionDirectory("TestProject");
+            string projectEtalon = ProjectCompareHelper.FindSolutionDirectory("TestProject.Etalon");
             string projectAfterConversion = ProjectCompareHelper.CreateProjectCopy(projectToConvert);
             try {
                 RunFullPipeline(projectAfterConversion);

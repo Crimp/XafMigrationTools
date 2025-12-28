@@ -194,6 +194,7 @@ namespace XafApiConverter.Converter {
         /// Add or update package references.
         /// If DevExpress packages already exist (starting with DevExpress.ExpressApp), 
         /// update their versions instead of adding new packages.
+        /// Also handles Web → Blazor package migration and removal of no-equivalent packages.
         /// </summary>
         private void AddOrUpdatePackageReferences(XElement project, XDocument originalDoc, ProjectInfo info) {
             // Check if original project has DevExpress.ExpressApp packages
@@ -211,39 +212,57 @@ namespace XafApiConverter.Converter {
                 p.Name.StartsWith("DevExpress.ExpressApp", StringComparison.OrdinalIgnoreCase));
 
             if (hasDevExpressPackages) {
-                // Project already has DevExpress packages - update versions instead of adding new ones
-                Console.WriteLine("  Found existing DevExpress packages - updating versions...");
+                // Project already has DevExpress packages - update versions and migrate Web → Blazor
+                Console.WriteLine("  Found existing DevExpress packages - migrating and updating versions...");
                 
                 var itemGroup = new XElement("ItemGroup");
                 bool anyPackageUpdated = false;
+                bool anyPackageMigrated = false;
+                var removedPackages = new List<string>();
 
                 foreach (var package in existingPackages) {
+                    var packageName = package.Name;
+                    
+                    // Check if package should be removed
+                    if (TypeReplacementMap.ShouldRemovePackage(packageName)) {
+                        removedPackages.Add(packageName);
+                        Console.WriteLine($"    Removed: {packageName} (no equivalent in .NET)");
+                        continue;
+                    }
+                    
+                    // Check if package should be migrated (Web → Blazor)
+                    if (TypeReplacementMap.TryGetPackageReplacement(packageName, out var replacement) && replacement.HasEquivalent) {
+                        packageName = replacement.NewPackage;
+                        Console.WriteLine($"    Migrated: {package.Name} → {packageName}");
+                        anyPackageMigrated = true;
+                    }
+                    
                     var packageRef = new XElement("PackageReference");
-                    packageRef.SetAttributeValue("Include", package.Name);
+                    packageRef.SetAttributeValue("Include", packageName);
                     
                     // Update version for DevExpress packages
-                    if (package.Name.StartsWith("DevExpress.ExpressApp", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Persistent", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Data", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Office", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Pdf", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Printing", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Sparkline", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Charts", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.CodeParser", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Drawing", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Images", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Maui", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.RichEdit", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Spreadsheet", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Xpo", StringComparison.OrdinalIgnoreCase) ||
-                        package.Name.StartsWith("DevExpress.Xpf", StringComparison.OrdinalIgnoreCase)) {
+                    if (packageName.StartsWith("DevExpress.ExpressApp", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Persistent", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Data", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Office", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Pdf", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Printing", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Sparkline", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Charts", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.CodeParser", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Drawing", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Images", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Maui", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.RichEdit", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Spreadsheet", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Xpo", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Xpf", StringComparison.OrdinalIgnoreCase)) {
                         
                         if (!_config.UseDirectoryPackages) {
                             packageRef.SetAttributeValue("Version", _config.DxPackageVersion);
                             
                             if (package.Version != _config.DxPackageVersion) {
-                                Console.WriteLine($"    Updated: {package.Name} from {package.Version} to {_config.DxPackageVersion}");
+                                Console.WriteLine($"    Updated: {packageName} from {package.Version} to {_config.DxPackageVersion}");
                                 anyPackageUpdated = true;
                             }
                         }
@@ -258,7 +277,7 @@ namespace XafApiConverter.Converter {
                     itemGroup.Add(packageRef);
                 }
                 
-                if (!anyPackageUpdated) {
+                if (!anyPackageUpdated && !anyPackageMigrated && removedPackages.Count == 0) {
                     Console.WriteLine($"    All DevExpress packages are already at version {_config.DxPackageVersion}");
                 }
 
