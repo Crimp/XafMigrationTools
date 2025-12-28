@@ -259,7 +259,7 @@ namespace XafApiConverter.Converter {
                 }
                 
                 if (!anyPackageUpdated) {
-                    Console.WriteLine("    All DevExpress packages are already at version {_config.DxPackageVersion}");
+                    Console.WriteLine($"    All DevExpress packages are already at version {_config.DxPackageVersion}");
                 }
 
                 project.Add(itemGroup);

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -40,10 +40,6 @@ namespace XafApiConverter.Converter {
 
                 // TRANS-007 Verification
                 ValidateEmbeddedResources(doc, result);
-
-                // File size check
-                ValidateFileSize(projectPath, result);
-
             }
             catch (Exception ex) {
                 result.AddError($"Validation error: {ex.Message}");
@@ -202,20 +198,6 @@ namespace XafApiConverter.Converter {
 
             if (resxWithDependentUpon.Any()) {
                 result.AddWarning($"Found {resxWithDependentUpon.Count} .resx files with DependentUpon (should be removed for SDK-style auto-inclusion)");
-            }
-        }
-
-        private static void ValidateFileSize(string projectPath, ValidationResult result) {
-            var fileInfo = new FileInfo(projectPath);
-            var backupPath = projectPath + ".backup";
-            
-            if (File.Exists(backupPath)) {
-                var backupInfo = new FileInfo(backupPath);
-                var reductionPercent = (1.0 - (double)fileInfo.Length / backupInfo.Length) * 100;
-                
-                if (reductionPercent > 0) {
-                    result.AddSuccess($"File size reduced by {reductionPercent:F1}% ({backupInfo.Length} ? {fileInfo.Length} bytes)");
-                }
             }
         }
     }

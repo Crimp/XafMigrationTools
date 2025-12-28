@@ -392,7 +392,7 @@ namespace XafApiConverter.Converter {
 
         /// <summary>
         /// Types that have XAF .NET equivalents but require manual conversion (TRANS-010)
-        /// These types cannot be automatically converted and require LLM analysis
+        /// These types cannot be automatically converted
         /// </summary>
         public static readonly Dictionary<string, TypeReplacement> ManualConversionRequiredTypes = new() {
             { "WebPropertyEditor", new TypeReplacement(

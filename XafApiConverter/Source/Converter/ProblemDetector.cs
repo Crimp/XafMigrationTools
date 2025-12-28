@@ -4,9 +4,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using XafApiConverter.SyntaxConverters;
 
 namespace XafApiConverter.Converter {
-    /// <summary>
-    /// Detects problematic code patterns that require LLM intervention
-    /// </summary>
     internal class ProblemDetector {
         private readonly Solution _solution;
 
@@ -225,7 +222,7 @@ namespace XafApiConverter.Converter {
                 }
             }
 
-            // 4. Check for NO_EQUIVALENT and MANUAL_CONVERSION_REQUIRED types used in cod            
+            // 4. Check for NO_EQUIVALENT and MANUAL_CONVERSION_REQUIRED types used in code
             var identifierCollector = new IdentifierNameSyntaxCollector();
             identifierCollector.Visit(classDecl);
             foreach (var identifier in identifierCollector.Identifiers) {
@@ -330,7 +327,7 @@ namespace XafApiConverter.Converter {
 
             // Check removed assemblies
             if (assemblyName != null && fullTypeName.StartsWith("DevExpress.")) {
-                string assemblyNameWithoutVersion = GetAsssemblyNameWithoutVersion(assemblyName);
+                string assemblyNameWithoutVersion = GetAssemblyNameWithoutVersion(assemblyName);
                 if (TypeReplacementMap.RemovedAssemblies.Contains(assemblyNameWithoutVersion)) {
                     problems.Add(new TypeProblem {
                         TypeName = typeName,
@@ -345,7 +342,7 @@ namespace XafApiConverter.Converter {
             }
         }
 
-        static string GetAsssemblyNameWithoutVersion(string assemblyName) {
+        static string GetAssemblyNameWithoutVersion(string assemblyName) {
             if (assemblyName.EndsWith(".dll"))
                 assemblyName = assemblyName.Replace(".dll", "");
             if (!assemblyName.StartsWith("DevExpress.") || assemblyName.LastIndexOf(".v") != assemblyName.Length - 6)

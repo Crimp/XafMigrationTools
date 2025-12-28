@@ -6,11 +6,6 @@ using System.Text.RegularExpressions;
 using XafApiConverter.Converter.CodeAnalysis;
 
 namespace XafApiConverter.Converter {
-    /// <summary>
-    /// Main type migration tool - hybrid approach (programmatic + LLM)
-    /// Implements TRANS-006, TRANS-007, TRANS-008 automatically
-    /// Detects TRANS-009, TRANS-010 problems for LLM analysis
-    /// </summary>
     internal class TypeMigrationTool {
         private readonly string _solutionPath;
         private Solution _solution;
@@ -39,9 +34,6 @@ namespace XafApiConverter.Converter {
             _semanticCache = new SemanticCache();
         }
 
-        /// <summary>
-        /// Run complete migration workflow
-        /// </summary>
         public MigrationReport RunMigration() {
             Console.WriteLine("Starting Type Migration...");
             Console.WriteLine();
@@ -341,7 +333,7 @@ namespace XafApiConverter.Converter {
         }
 
         /// <summary>
-        /// Phase 3: Detect problems for LLM analysis
+        /// Phase 3:
         /// TRANS-009: Classes using NO_EQUIVALENT types
         /// Uses cached semantic models from Phase 1.5 to analyze ORIGINAL code before any modifications.
         /// </summary>

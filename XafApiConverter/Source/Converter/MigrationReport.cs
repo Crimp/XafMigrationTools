@@ -6,9 +6,6 @@ using System.Text;
 using XafApiConverter.Converter.CodeAnalysis;
 
 namespace XafApiConverter.Converter {
-    /// <summary>
-    /// Migration report generator for LLM analysis
-    /// </summary>
     internal class MigrationReport {
         public string SolutionPath { get; set; }
         public DateTime GeneratedAt { get; set; } = DateTime.Now;
@@ -352,7 +349,7 @@ namespace XafApiConverter.Converter {
         /// Save report to file
         /// </summary>
         public void SaveToFile(string filePath) {
-            //TODO: Review rport generation
+            //TODO: Review report generation
 
             //var markdown = ToMarkdown();
             //File.WriteAllText(filePath, markdown, Encoding.UTF8);
