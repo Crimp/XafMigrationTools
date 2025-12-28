@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using DevExpress.ExpressApp;
 using DevExpress.Data.Filtering;
 using MainDemo.Module.BusinessObjects;
 using DevExpress.ExpressApp.SystemModule;
 using DevExpress.Persistent.Base.General;
 using DevExpress.ExpressApp.Security.Strategy;
+using DevExpress.ExpressApp.Kpi;
 
 namespace MainDemo.Module.DatabaseUpdate {
 	public class Updater : DevExpress.ExpressApp.Updating.ModuleUpdater {
@@ -159,6 +160,20 @@ namespace MainDemo.Module.DatabaseUpdate {
 				canEditAssociationsMemberPermission.AllowWrite = true;
             }
             return userRole;
+        }
+        private void CreateKpiObjects() {
+            KpiDefinition obj1 = ObjectSpace.FindObject<KpiDefinition>(CriteriaOperator.Parse("Name='Sales'"));
+            if(obj1 == null) {
+                obj1 = ObjectSpace.CreateObject<KpiDefinition>();
+                obj1.Name = "Sales";
+                obj1.Criteria = "OrderDate >= '@RangeStart' And OrderDate <= '@RangeEnd'";
+                obj1.Expression = "Sum(Freight)";
+                obj1.Range = DateRangeRepository.FindRange("Rolling 1996");
+                obj1.Compare = true;
+                obj1.RangeToCompare = DateRangeRepository.FindRange("Rolling 1995");
+                obj1.MeasurementFrequency = TimeIntervalType.Month;
+                obj1.Save();
+            }
         }
         //Managers can access and fully edit (including create and delete capabilities) data from their own department. However, they cannot access data from other departments.
         private SecuritySystemRole GetManagerRole() {

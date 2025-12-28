@@ -1,4 +1,4 @@
-# DevExpress.ExpressApp.Security.v25.2
+﻿# DevExpress.ExpressApp.Security.v25.2
 
 DevExpress.ExpressApp.Security.ClientPermissionRequestProcessor
 DevExpress.ExpressApp.Security.CriteriaLevel
@@ -82,6 +82,26 @@ DevExpress.ExpressApp.Security.IOperationPermissionProvider
 
 DevExpress.Persistent.Base.Security.ISimpleUser
 DevExpress.Persistent.Base.Security.SecurityValidationRuleHelper
+DevExpress.ExpressApp.Kpi.DateBase
+DevExpress.ExpressApp.Kpi.Direction
+DevExpress.ExpressApp.Kpi.TimeIntervalType
+DevExpress.ExpressApp.Kpi.MeasurementMode
+DevExpress.ExpressApp.Kpi.MeasurementType
+DevExpress.ExpressApp.Kpi.IDateTimePoint
+DevExpress.ExpressApp.Kpi.IDateRange
+DevExpress.ExpressApp.Kpi.IKpiDefinition
+DevExpress.ExpressApp.Kpi.KpiDefinition
+DevExpress.Persistent.Kpi.BaseKpiObject
+DevExpress.Persistent.Kpi.KpiHistoryItem
+DevExpress.Persistent.Kpi.KpiInstance
+DevExpress.Persistent.Kpi.KpiScorecard
+DevExpress.ExpressApp.Kpi.IKpiHistoryItem
+DevExpress.ExpressApp.Kpi.IKpiInstance
+DevExpress.ExpressApp.Kpi.IKpiHistoryCacheManager
+DevExpress.ExpressApp.Kpi.RangePoint
+DevExpress.ExpressApp.Kpi.DateRange
+DevExpress.ExpressApp.Kpi.DateRangeRepository
+DevExpress.Persistent.Base.Kpi.KpiHelper
 
 # DevExpress.Xpo.v25.2
 

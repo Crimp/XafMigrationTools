@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using DevExpress.ExpressApp;
 using DevExpress.Data.Filtering;
 using MainDemo.Module.BusinessObjects;
@@ -7,7 +7,16 @@ using DevExpress.Persistent.Base.General;
 using DevExpress.ExpressApp.Security.Strategy;
 
 namespace MainDemo.Module.DatabaseUpdate {
-	public class Updater : DevExpress.ExpressApp.Updating.ModuleUpdater {
+    // TODO: The 'Updater' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    // NOTE:
+    //   - Type 'DevExpress.ExpressApp.Kpi.KpiDefinition' has no equivalent in XAF .NET
+    //     KpiDefinition has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Kpi.DateRangeRepository' has no equivalent in XAF .NET
+    //     DateRangeRepository has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Kpi.TimeIntervalType' has no equivalent in XAF .NET
+    //     TimeIntervalType has no equivalent in XAF .NET (loaded from removed-api.txt)
+    public class Updater : DevExpress.ExpressApp.Updating.ModuleUpdater {
 
         static Updater() {
             // https://supportcenter.devexpress.com/ticket/details/T1312589
@@ -162,6 +171,20 @@ namespace MainDemo.Module.DatabaseUpdate {
 				canEditAssociationsMemberPermission.WriteState = DevExpress.Persistent.Base.SecurityPermissionState.Allow;
             }
             return userRole;
+        }
+        private void CreateKpiObjects() {
+            KpiDefinition obj1 = ObjectSpace.FindObject<KpiDefinition>(CriteriaOperator.Parse("Name='Sales'"));
+            if(obj1 == null) {
+                obj1 = ObjectSpace.CreateObject<KpiDefinition>();
+                obj1.Name = "Sales";
+                obj1.Criteria = "OrderDate >= '@RangeStart' And OrderDate <= '@RangeEnd'";
+                obj1.Expression = "Sum(Freight)";
+                obj1.Range = DateRangeRepository.FindRange("Rolling 1996");
+                obj1.Compare = true;
+                obj1.RangeToCompare = DateRangeRepository.FindRange("Rolling 1995");
+                obj1.MeasurementFrequency = TimeIntervalType.Month;
+                obj1.Save();
+            }
         }
         //Managers can access and fully edit (including create and delete capabilities) data from their own department. However, they cannot access data from other departments.
         private DevExpress.Persistent.BaseImpl.PermissionPolicy.PermissionPolicyRole GetManagerRole() {
