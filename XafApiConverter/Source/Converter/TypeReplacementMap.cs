@@ -346,6 +346,29 @@ namespace XafApiConverter.Converter {
         /// Types with NO XAF .NET equivalent (TRANS-009)
         /// These types have no equivalents in XAF .NET and require commenting out entire classes.
         /// This collection is dynamically populated from removed-api.txt and can be manually extended.
+        /// 
+        /// CASCADE DEPENDENCIES:
+        /// ============================================
+        /// When a class uses a type from this dictionary:
+        /// 
+        /// 1. If the class is NOT protected (does not inherit from ProtectedBaseClasses):
+        ///    → The class will be FULLY COMMENTED OUT
+        ///    → Any classes depending on it will also be commented out (cascade effect)
+        /// 
+        /// 2. If the class IS protected (inherits from ProtectedBaseClasses like ModuleBase, BaseObject):
+        ///    → The class receives a WARNING COMMENT only
+        ///    → The class remains ACTIVE and functional
+        ///    → Classes depending on it will NOT be cascaded (because the class is still usable)
+        /// 
+        /// IMPORTANT FILTERING:
+        /// ====================
+        /// Types from ProtectedBaseClasses (e.g., WinApplication, ModuleBase, BaseObject) are
+        /// AUTOMATICALLY FILTERED OUT when loading from removed-api.txt. Even if a protected
+        /// type exists in removed-api.txt, it will NOT be added to this dictionary to prevent
+        /// conflicts and ensure protected types are always preserved with warnings only.
+        /// 
+        /// This prevents false positives where classes using protected application/module classes
+        /// are unnecessarily commented out.
         /// </summary>
         public static readonly Dictionary<string, TypeReplacement> NoEquivalentTypes = new() {
             // Manually defined types with detailed descriptions
@@ -652,6 +675,13 @@ namespace XafApiConverter.Converter {
 
                     string namespaceName = fullTypeName.Substring(0, lastDotIndex);
                     string typeName = fullTypeName.Substring(lastDotIndex + 1);
+
+                    // Skip protected base classes
+                    // Protected types like WinApplication should NOT be in NoEquivalentTypes
+                    // because they are meant to be preserved (with warnings only)
+                    if (ProtectedBaseClasses.Contains(typeName)) {
+                        continue;  // Skip this type - it's protected
+                    }
 
                     // Only add if not already in the dictionary (manually defined entries take precedence)
                     if (!NoEquivalentTypes.ContainsKey(typeName)) {

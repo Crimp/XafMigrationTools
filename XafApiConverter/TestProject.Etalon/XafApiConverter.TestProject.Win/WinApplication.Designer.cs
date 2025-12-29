@@ -1,0 +1,73 @@
+﻿namespace SecurityDemo.Win
+{
+	// TODO: The 'SecurityDemoWindowsFormsApplication' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+	//       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+	// NOTE:
+	//   - Type 'DevExpress.ExpressApp.Objects.BusinessClassLibraryCustomizationModule' has no equivalent in XAF .NET
+	//     BusinessClassLibraryCustomizationModule has no equivalent in XAF .NET (loaded from removed-api.txt)
+partial class SecurityDemoWindowsFormsApplication
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.module1 = new DevExpress.ExpressApp.SystemModule.SystemModule();
+            this.module2 = new DevExpress.ExpressApp.Win.SystemModule.SystemWindowsFormsModule();
+            this.module6 = new DevExpress.ExpressApp.Objects.BusinessClassLibraryCustomizationModule();
+            this.module7 = new DevExpress.ExpressApp.TreeListEditors.TreeListEditorsModuleBase();
+            this.module8 = new DevExpress.ExpressApp.TreeListEditors.Win.TreeListEditorsWindowsFormsModule();
+            this.module10 = new DevExpress.ExpressApp.Validation.Win.ValidationWindowsFormsModule();
+            this.securityModule1 = new DevExpress.ExpressApp.Security.SecurityModule();
+
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
+            // 
+			// SecurityDemoWindowsFormsApplication
+            //
+			this.ApplicationName = "SecurityDemo";
+            this.Modules.Add(this.module1);
+            this.Modules.Add(this.module2);
+            this.Modules.Add(this.module6);
+            this.Modules.Add(this.module7);
+            this.Modules.Add(this.module8);
+            this.Modules.Add(this.module10);
+            this.Modules.Add(this.securityModule1);
+            this.CheckCompatibilityType = DevExpress.ExpressApp.CheckCompatibilityType.DatabaseSchema;
+            this.DatabaseUpdateMode = DevExpress.ExpressApp.DatabaseUpdateMode.UpdateDatabaseAlways;
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
+
+        }
+
+        #endregion
+
+        private DevExpress.ExpressApp.SystemModule.SystemModule module1;
+        private DevExpress.ExpressApp.Win.SystemModule.SystemWindowsFormsModule module2;
+        private DevExpress.ExpressApp.Objects.BusinessClassLibraryCustomizationModule module6;
+        private DevExpress.ExpressApp.TreeListEditors.TreeListEditorsModuleBase module7;
+        private DevExpress.ExpressApp.TreeListEditors.Win.TreeListEditorsWindowsFormsModule module8;
+        private DevExpress.ExpressApp.Validation.Win.ValidationWindowsFormsModule module10;
+        private DevExpress.ExpressApp.Security.SecurityModule securityModule1;
+
+    }
+}

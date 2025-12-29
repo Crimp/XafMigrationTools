@@ -454,6 +454,7 @@
     <Compile Include="BO\ProtectedHeir_2.cs" />
     <Compile Include="BO\StringKeyPropertyObject.cs" />
     <Compile Include="BO\TestProtectedClass.cs" />
+    <Compile Include="Controllers\TestController_1.cs" />
     <Compile Include="CustomLayoutTemplates.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>

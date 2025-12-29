@@ -66,7 +66,7 @@ namespace XafApiConverter.Converter {
 
                 Console.WriteLine();
                 Console.WriteLine("[OK] Migration analysis complete!");
-                _report.PrintSummary();
+                //_report.PrintSummary();
 
                 return _report;
             } catch(Exception ex) {
@@ -200,7 +200,7 @@ namespace XafApiConverter.Converter {
         }
 
         /// <summary>
-        /// Process using directives in syntax root.
+        /// Process using directive in syntax root.
         /// Internal static helper for tests and production use.
         /// Handles SqlClient namespace, DevExpress namespaces, and NO_EQUIVALENT namespace removal.
         /// </summary>
@@ -397,12 +397,34 @@ namespace XafApiConverter.Converter {
                     problematicClasses.AddRange(classesInFile);
                 }
 
-                // CRITICAL: Check if each problematic class is protected BEFORE cascading
+                // Check if each problematic class is protected BEFORE cascading
                 // This ensures cascade logic knows which classes will be fully commented vs warned
+                //
+                // Deduplicate by FullName to handle partial classes correctly
+                // Partial classes may appear multiple times (one per file), but we only want
+                // to process each unique class once. If ANY part is protected, the whole class is protected.
+                var uniqueProblematicClasses = new Dictionary<string, ProblematicClass>(StringComparer.OrdinalIgnoreCase);
+                
                 foreach(var problematicClass in problematicClasses) {
                     bool isProtected = CheckIfClassIsProtected(problematicClass.FilePath, problematicClass.ClassName);
                     problematicClass.IsFullyCommented = !isProtected;  // Protected classes are NOT fully commented
+                    
+                    // Deduplicate: if class already exists, keep the one that is MORE protected
+                    // (IsFullyCommented = false wins over IsFullyCommented = true)
+                    if (uniqueProblematicClasses.TryGetValue(problematicClass.FullName, out var existing)) {
+                        // If existing is protected (IsFullyCommented = false), keep it
+                        // If new one is protected, replace existing
+                        if (!problematicClass.IsFullyCommented) {
+                            // New one is protected - replace existing
+                            uniqueProblematicClasses[problematicClass.FullName] = problematicClass;
+                        }
+                    } else {
+                        uniqueProblematicClasses[problematicClass.FullName] = problematicClass;
+                    }
                 }
+                
+                // Replace problematicClasses with deduplicated version
+                problematicClasses = uniqueProblematicClasses.Values.ToList();
 
                 // Find dependencies for each problematic class using semantic analysis
                 foreach(var problematicClass in problematicClasses) {
@@ -435,6 +457,10 @@ namespace XafApiConverter.Converter {
         /// <summary>
         /// Check if a class is protected (inherits from protected base classes).
         /// Helper method to determine IsFullyCommented flag during DetectProblems phase.
+        /// Checks TRANSITIVE inheritance, not just direct base classes.
+        /// 
+        /// For partial classes, checks ALL parts to find base class inheritance.
+        /// Base class declaration may be in ANY part of the partial class.
         /// </summary>
         private bool CheckIfClassIsProtected(string filePath, string className) {
             try {
@@ -455,32 +481,171 @@ namespace XafApiConverter.Converter {
                     return false;
                 }
 
-                // Check base types
-                if(classDecl.BaseList == null) {
+                // Check if this is a partial class
+                bool isPartial = classDecl.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword));
+                
+                if (isPartial) {
+                    // For partial classes, we need to check ALL parts
+                    // Base class may be declared in any part
+                    var directory = Path.GetDirectoryName(filePath);
+                    if (!string.IsNullOrEmpty(directory)) {
+                        var allFiles = Directory.GetFiles(directory, "*.cs", SearchOption.TopDirectoryOnly);
+                        
+                        foreach (var file in allFiles) {
+                            try {
+                                var fileContent = File.ReadAllText(file);
+                                var fileSyntaxTree = CSharpSyntaxTree.ParseText(fileContent);
+                                var fileRoot = fileSyntaxTree.GetRoot();
+                                
+                                var partialClassDecl = fileRoot.DescendantNodes()
+                                    .OfType<ClassDeclarationSyntax>()
+                                    .FirstOrDefault(c => c.Identifier.Text == className && 
+                                                       c.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword)));
+                                
+                                if (partialClassDecl != null && partialClassDecl.BaseList != null) {
+                                    // Check base types in this part
+                                    foreach(var baseType in partialClassDecl.BaseList.Types) {
+                                        if(IsProtectedBaseType(baseType.Type, file, fileContent, new HashSet<string>())) {
+                                            return true;
+                                        }
+                                    }
+                                }
+                            } catch {
+                                // Ignore errors reading other files
+                                continue;
+                            }
+                        }
+                    }
+                    
+                    // No protected base class found in any part
+                    return false;
+                } else {
+                    // Non-partial class - check base types directly
+                    if(classDecl.BaseList == null) {
+                        return false;
+                    }
+
+                    foreach(var baseType in classDecl.BaseList.Types) {
+                        // Use recursive check to handle transitive inheritance
+                        if(IsProtectedBaseType(baseType.Type, filePath, content, new HashSet<string>())) {
+                            return true;
+                        }
+                    }
+
                     return false;
                 }
-
-                foreach(var baseType in classDecl.BaseList.Types) {
-                    var baseTypeName = baseType.Type.ToString();
-
-                    // Extract simple name (e.g., "BaseObject" from "Namespace.BaseObject")
-                    var lastDot = baseTypeName.LastIndexOf('.');
-                    var simpleBaseTypeName = lastDot >= 0
-                        ? baseTypeName.Substring(lastDot + 1)
-                        : baseTypeName;
-
-                    // Check if this is a protected base class
-                    if(TypeReplacementMap.ProtectedBaseClasses.Contains(simpleBaseTypeName)) {
-                        return true;
-                    }
-                }
-
-                return false;
-            } catch {
+            } catch(Exception ex) {
+                Console.WriteLine($"      [ERROR] Failed to check if class '{className}' is protected: {ex.Message}");
                 return false;
             }
         }
 
+        /// <summary>
+        /// Recursively check if a base type is protected or inherits from a protected type.
+        /// Uses syntax-only analysis (similar to ClassCommenter.IsProtectedBaseType).
+        /// </summary>
+        private bool IsProtectedBaseType(TypeSyntax baseTypeSyntax, string currentFilePath, string fileContent, HashSet<string> visitedTypes) {
+            // Extract simple name without generic parameters
+            string baseTypeName = ExtractSimpleTypeName(baseTypeSyntax);
+
+            if(string.IsNullOrEmpty(baseTypeName)) {
+                return false;
+            }
+
+            // Check for circular reference
+            if(visitedTypes.Contains(baseTypeName)) {
+                return false;
+            }
+            visitedTypes.Add(baseTypeName);
+
+            // STEP 1: Direct check - is this type name in the protected list?
+            if(TypeReplacementMap.ProtectedBaseClasses.Contains(baseTypeName)) {
+                return true;
+            }
+
+            // STEP 2: Transitive check - find the base type definition and check its inheritance
+            var baseClassDecl = FindClassDefinitionInFile(baseTypeName, fileContent);
+
+            if(baseClassDecl != null) {
+                // Found in same file - check its base classes recursively
+                if(baseClassDecl.BaseList != null) {
+                    foreach(var transitiveBase in baseClassDecl.BaseList.Types) {
+                        if(IsProtectedBaseType(transitiveBase.Type, currentFilePath, fileContent, visitedTypes)) {
+                            return true;
+                        }
+                    }
+                }
+            } else if(!string.IsNullOrEmpty(currentFilePath)) {
+                // Not found in same file - try to find in other files in the same directory
+                var directory = Path.GetDirectoryName(currentFilePath);
+                if(!string.IsNullOrEmpty(directory)) {
+                    var otherFiles = Directory.GetFiles(directory, "*.cs", SearchOption.TopDirectoryOnly)
+                        .Where(f => !f.Equals(currentFilePath, StringComparison.OrdinalIgnoreCase));
+
+                    foreach(var file in otherFiles) {
+                        try {
+                            var content = File.ReadAllText(file);
+                            var foundClass = FindClassDefinitionInFile(baseTypeName, content);
+
+                            if(foundClass != null && foundClass.BaseList != null) {
+                                // Found the base class - check its inheritance recursively
+                                foreach(var transitiveBase in foundClass.BaseList.Types) {
+                                    if(IsProtectedBaseType(transitiveBase.Type, file, content, visitedTypes)) {
+                                        return true;
+                                    }
+                                }
+                                break; // Found the class, no need to search further
+                            }
+                        } catch {
+                            // Ignore errors reading other files
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Extract simple type name from TypeSyntax, handling generics and qualified names.
+        /// </summary>
+        private string ExtractSimpleTypeName(TypeSyntax typeSyntax) {
+            switch(typeSyntax) {
+                case GenericNameSyntax genericName:
+                    return genericName.Identifier.Text;
+
+                case IdentifierNameSyntax identifierName:
+                    return identifierName.Identifier.Text;
+
+                case QualifiedNameSyntax qualifiedName:
+                    var rightName = qualifiedName.Right;
+                    if(rightName is GenericNameSyntax rightGeneric) {
+                        return rightGeneric.Identifier.Text;
+                    }
+                    return rightName.Identifier.Text;
+
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Find a class definition by name in the given file content.
+        /// </summary>
+        private ClassDeclarationSyntax FindClassDefinitionInFile(string className, string fileContent) {
+            try {
+                var syntaxTree = CSharpSyntaxTree.ParseText(fileContent);
+                var root = syntaxTree.GetRoot();
+
+                return root.DescendantNodes()
+                    .OfType<ClassDeclarationSyntax>()
+                    .FirstOrDefault(c => c.Identifier.Text == className);
+            } catch {
+                return null;
+            }
+        }
+        
         /// <summary>
         /// Cascade problematic class detection.
         /// If class A is problematic and class B depends on A, then B is also problematic.
@@ -489,6 +654,12 @@ namespace XafApiConverter.Converter {
         /// IMPORTANT: Only cascades for FULLY COMMENTED classes (IsFullyCommented = true).
         /// Protected classes with warning comments (IsFullyCommented = false) do NOT cascade,
         /// because they remain active and functional.
+        /// If class 'A' has warning comments only (IsFullyCommented = false),
+        /// then another class 'B' using 'A' should NOT be marked as problematic,
+        /// because 'A' remains active and usable.
+        /// 
+        /// Only when a class DIRECTLY uses types from NoEquivalentTypes that will be commented out
+        /// should it be cascaded.
         /// </summary>
         /// <param name="initialProblematicClasses">Initial list of problematic classes detected directly</param>
         /// <param name="detector">ProblemDetector instance for dependency analysis</param>
@@ -508,6 +679,11 @@ namespace XafApiConverter.Converter {
             // ONLY classes that will be FULLY COMMENTED OUT (IsFullyCommented = true)
             var toProcess = new Queue<ProblematicClass>(
                 initialProblematicClasses.Where(c => c.IsFullyCommented));
+
+            // CRITICAL: Track which classes are fully commented for cascade decisions
+            var fullyCommentedClasses = new HashSet<string>(
+                initialProblematicClasses.Where(c => c.IsFullyCommented).Select(c => c.FullName),
+                StringComparer.OrdinalIgnoreCase);
 
             while(toProcess.Count > 0) {
                 var currentClass = toProcess.Dequeue();
@@ -574,12 +750,16 @@ namespace XafApiConverter.Converter {
                         continue;
                     }
 
+                    // Check if the dependent class should be fully commented
+                    // If it inherits from protected base classes, it should only receive warnings
+                    bool isDependentProtected = CheckIfClassIsProtected(dependentFilePath, dependentClassName);
+
                     // Create ProblematicClass entry for the dependent
                     var dependentProblematicClass = new ProblematicClass {
                         ClassName = dependentClassName,
                         Namespace = dependentNamespace,
                         FilePath = dependentFilePath,
-                        IsFullyCommented = true,  // Cascaded classes are fully commented by default
+                        IsFullyCommented = !isDependentProtected,  // Protected classes get warnings only
                         Problems = new List<TypeProblem> {
                             new TypeProblem {
                                 TypeName = currentClass.ClassName,
@@ -587,7 +767,7 @@ namespace XafApiConverter.Converter {
                                 Reason = $"Depends on problematic class '{currentClass.FullName}' which has no .NET equivalent",
                                 Description = $"Class uses '{currentClass.FullName}' which is being commented out due to having no .NET equivalent",
                                 Severity = ProblemSeverity.Critical,
-                                RequiresCommentOut = true
+                                RequiresCommentOut = !isDependentProtected  // Only comment out if not protected
                             }
                         }
                     };
@@ -596,19 +776,19 @@ namespace XafApiConverter.Converter {
                     allProblematicClasses.Add(dependentProblematicClass);
                     problematicClassNames.Add(dependentFullName);
 
-                    // Add to queue to check its dependents (cascade will continue)
-                    toProcess.Enqueue(dependentProblematicClass);
-
-                    Console.WriteLine($"    [CASCADE] Class {dependentFullName} marked as problematic (depends on {currentClass.FullName})");
+                    // Only add to cascade queue if fully commented
+                    if(!isDependentProtected) {
+                        fullyCommentedClasses.Add(dependentFullName);
+                        toProcess.Enqueue(dependentProblematicClass);
+                        Console.WriteLine($"    [CASCADE] Class {dependentFullName} marked as problematic and will be commented out (depends on {currentClass.FullName})");
+                    } else {
+                        Console.WriteLine($"    [CASCADE] Class {dependentFullName} marked as problematic but protected - warning only (depends on {currentClass.FullName})");
+                    }
                 }
             }
 
             return allProblematicClasses;
         }
-
-        
-
-
 
         /// <summary>
         /// Phase 5: Generate and save report
