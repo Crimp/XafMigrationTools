@@ -10,8 +10,8 @@ namespace FeatureCenter.Module.Web.PropertyEditors {
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Type 'WebPropertyEditor' has no equivalent (inferred from using DevExpress.ExpressApp.Web.Editors)
-    //     WebPropertyEditor has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Type 'WebPropertyEditor' requires manual conversion (inferred from using DevExpress.ExpressApp.Web.Editors)
+    //     WebPropertyEditor has Blazor equivalent (BlazorPropertyEditorBase) but automatic conversion is not possible. Manual refactoring required.
     //   - Type 'ITestable' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)
     //     ITestable has no equivalent in XAF for .NET (loaded from removed-api.txt)
     //   - Type 'IJScriptTestControl' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)

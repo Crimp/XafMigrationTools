@@ -14,8 +14,8 @@ namespace FeatureCenter.Module.Web.PropertyEditors {
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Type 'ASPxPropertyEditor' has no equivalent (inferred from using DevExpress.ExpressApp.Web.Editors.ASPx)
-    //     ASPxPropertyEditor has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Type 'ASPxPropertyEditor' requires manual conversion (inferred from using DevExpress.ExpressApp.Web.Editors.ASPx)
+    //     ASPxPropertyEditor has Blazor equivalent (BlazorPropertyEditorBase) but automatic conversion is not possible. Manual refactoring required.
     //   - Type 'RenderHelper' has no equivalent (inferred from using DevExpress.ExpressApp.Web)
     //     RenderHelper has no equivalent in XAF for .NET (loaded from removed-api.txt)
     // ========== COMMENTED OUT CLASS ==========

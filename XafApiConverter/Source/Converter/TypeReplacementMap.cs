@@ -673,6 +673,12 @@ namespace XafApiConverter.Converter {
                         continue;  // Skip this type - it's protected
                     }
 
+                    // Skip types that have replacements in TypeReplacements or ManualConversionRequiredTypes
+                    // These types should be handled by automatic or manual replacement logic, not commented out
+                    if (TypeReplacements.ContainsKey(typeName) || ManualConversionRequiredTypes.ContainsKey(typeName)) {
+                        continue;  // Skip this type - it has a replacement
+                    }
+
                     // Only add if not already in the dictionary (manually defined entries take precedence)
                     if (!NoEquivalentTypes.ContainsKey(typeName)) {
                         NoEquivalentTypes[typeName] = new TypeReplacement(
@@ -684,18 +690,6 @@ namespace XafApiConverter.Converter {
                             new[] { ".cs" },
                             commentOutEntireClass: true);
                     }
-                }
-
-                // Step 2: Remove types that have equivalents in TypeReplacements
-                var typesToRemove = new List<string>();
-                foreach (var kvp in NoEquivalentTypes) {
-                    if (TypeReplacements.ContainsKey(kvp.Key)) {
-                        typesToRemove.Add(kvp.Key);
-                    }
-                }
-
-                foreach (var typeToRemove in typesToRemove) {
-                    NoEquivalentTypes.Remove(typeToRemove);
                 }
 
             } catch (Exception ex) {
