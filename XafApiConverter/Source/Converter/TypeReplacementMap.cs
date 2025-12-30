@@ -54,6 +54,16 @@ namespace XafApiConverter.Converter {
         /// Packages that have NO equivalent and should be removed
         /// </summary>
         public static readonly Dictionary<string, PackageReplacement> NoEquivalentPackages = new(StringComparer.OrdinalIgnoreCase) {
+            { "DevExpress.Utils", new PackageReplacement(
+                "DevExpress.Utils",
+                null,
+                "Direct reference to the DevExpress.Utils package is not required") },
+
+            { "DevExpress.Web.Themes", new PackageReplacement(
+                "DevExpress.Web.Themes",
+                null,
+                "Web.Themes has no Blazor equivalent - should be removed") },
+
             { "DevExpress.ExpressApp.Maps.Web", new PackageReplacement(
                 "DevExpress.ExpressApp.Maps.Web",
                 null,
@@ -272,7 +282,7 @@ namespace XafApiConverter.Converter {
             //    "DxGridListEditor",
             //    "DevExpress.ExpressApp.Web.Editors.ASPx",
             //    "DevExpress.ExpressApp.Blazor.Editors",
-            //    "ASPx grid to Dx grid") },
+            //    "ASPx grid to Dx grid") }
 
             //{ "ASPxLookupPropertyEditor", new TypeReplacement(
             //    "ASPxLookupPropertyEditor",
