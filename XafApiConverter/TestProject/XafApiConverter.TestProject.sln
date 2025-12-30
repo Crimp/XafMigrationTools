@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XafApiConverter.TestProject
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XafApiConverter.TestProject.Win2", "XafApiConverter.TestProject.Win2\XafApiConverter.TestProject.Win2.csproj", "{AA3E7C99-48FE-4D28-AF01-1350A8A118C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XafApiConverter.TestProject.Web2", "XafApiConverter.TestProject.Web2\XafApiConverter.TestProject.Web2.csproj", "{C4954784-1CC2-446C-8BB6-391D56585336}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{AA3E7C99-48FE-4D28-AF01-1350A8A118C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA3E7C99-48FE-4D28-AF01-1350A8A118C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA3E7C99-48FE-4D28-AF01-1350A8A118C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4954784-1CC2-446C-8BB6-391D56585336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4954784-1CC2-446C-8BB6-391D56585336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4954784-1CC2-446C-8BB6-391D56585336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4954784-1CC2-446C-8BB6-391D56585336}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

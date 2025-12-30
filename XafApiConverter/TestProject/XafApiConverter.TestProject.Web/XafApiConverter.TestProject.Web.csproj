@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ASPNETShowHintController.cs" />
     <Compile Include="TestClass_1.cs" />
     <Compile Include="WebModule.cs">
       <SubType>Component</SubType>

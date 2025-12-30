@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<RootNamespace>XafApiConverter.TestProject.Web2</RootNamespace>
+		<AssemblyName>XafApiConverter.TestProject.Web2</AssemblyName>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Identity" Version="1.17.1" />
+		<PackageReference Include="DevExpress.Drawing.Skia" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.AuditTrail.Xpo" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Chart" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.CloneObject" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.CodeAnalysis" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.ConditionalAppearance" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Dashboards" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Dashboards.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.FileAttachment.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Notifications" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Notifications.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Office" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Office.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.PivotGrid" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.ReportsV2" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.ReportsV2.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Scheduler" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Scheduler.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Security" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Security.AspNetCore" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Security.AspNetCore.Xpo" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.StateMachine" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.TreeListEditors" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Validation" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Validation.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.ViewVariantsModule" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.WebApi.Xpo" Version="25.1.6" />
+		<PackageReference Include="DevExpress.Persistent.BaseImpl.Xpo" Version="25.1.6" />
+		<PackageReference Include="DevExtreme.AspNet.Data" Version="5.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.OData" Version="9.3.2" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.78.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.14.0" />
+		<PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
+		<PackageReference Include="System.CodeDom" Version="8.0.0" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.15" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+		<PackageReference Include="System.Reactive" Version="6.0.1" />
+		<PackageReference Include="System.Security.AccessControl" Version="6.0.1" />
+		<PackageReference Include="System.Security.Permissions" Version="8.0.0" />
+		<PackageReference Include="System.Text.Json" Version="9.0.6" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\XafApiConverter.TestProject\XafApiConverter.TestProject.csproj" />
+	</ItemGroup>
+</Project>
