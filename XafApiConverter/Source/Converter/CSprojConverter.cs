@@ -115,14 +115,15 @@ namespace XafApiConverter.Converter {
         }
 
         private bool DetectWindowsProject(XDocument doc) {
-            // TRANS-002: Check for Windows-specific DevExpress references
+            // TRANS-002: Check for Windows-specific DevExpress references (both Reference and PackageReference)
             var references = doc.Descendants()
                 .Where(e => e.Name.LocalName == "Reference" || e.Name.LocalName == "PackageReference")
                 .Select(e => e.Attribute("Include")?.Value)
                 .Where(v => v != null);
 
             return references.Any(r => 
-                r.Contains("DevExpress.ExpressApp.Win") || 
+                r.Contains("DevExpress.ExpressApp.Win", StringComparison.OrdinalIgnoreCase) || 
+                r.StartsWith("DevExpress.Win.", StringComparison.OrdinalIgnoreCase) ||
                 r.Contains($"DevExpress.ExpressApp.Win.{_config.DxAssemblyVersion}"));
         }
 
@@ -244,6 +245,8 @@ namespace XafApiConverter.Converter {
                     if (packageName.StartsWith("DevExpress.ExpressApp", StringComparison.OrdinalIgnoreCase) ||
                         packageName.StartsWith("DevExpress.Persistent", StringComparison.OrdinalIgnoreCase) ||
                         packageName.StartsWith("DevExpress.Data", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.EasyTest", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Utils", StringComparison.OrdinalIgnoreCase) ||
                         packageName.StartsWith("DevExpress.Office", StringComparison.OrdinalIgnoreCase) ||
                         packageName.StartsWith("DevExpress.Pdf", StringComparison.OrdinalIgnoreCase) ||
                         packageName.StartsWith("DevExpress.Printing", StringComparison.OrdinalIgnoreCase) ||
@@ -256,9 +259,11 @@ namespace XafApiConverter.Converter {
                         packageName.StartsWith("DevExpress.RichEdit", StringComparison.OrdinalIgnoreCase) ||
                         packageName.StartsWith("DevExpress.Spreadsheet", StringComparison.OrdinalIgnoreCase) ||
                         packageName.StartsWith("DevExpress.Xpo", StringComparison.OrdinalIgnoreCase) ||
-                        packageName.StartsWith("DevExpress.Xpf", StringComparison.OrdinalIgnoreCase)) {
-                        
-                        if (!_config.UseDirectoryPackages) {
+                        packageName.StartsWith("DevExpress.Xpf", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Win.", StringComparison.OrdinalIgnoreCase) ||
+                        packageName.StartsWith("DevExpress.Reporting", StringComparison.OrdinalIgnoreCase)) {
+
+                        if(!_config.UseDirectoryPackages) {
                             packageRef.SetAttributeValue("Version", _config.DxPackageVersion);
                             
                             if (package.Version != _config.DxPackageVersion) {

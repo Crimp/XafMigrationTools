@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <RootNamespace>XafApiConverter.TestProject.Win2</RootNamespace>
+    <AssemblyName>XafApiConverter.TestProject.Win2</AssemblyName>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExpress.ExpressApp.Security.Xpo" Version="25.1.6" />
+    <PackageReference Include="DevExpress.Win.BonusSkins" Version="25.1.6" />
+    <PackageReference Include="DevExpress.ExpressApp.TreeListEditors.Win" Version="25.1.6" />
+    <PackageReference Include="DevExpress.ExpressApp.Validation.Win" Version="25.1.6" />
+    <PackageReference Include="DevExpress.Persistent.BaseImpl.Xpo" Version="25.1.6" />
+    <PackageReference Include="DevExpress.Win.Charts" Version="25.1.6" />
+    <PackageReference Include="DevExpress.Reporting.Core" Version="25.1.6" />
+    <PackageReference Include="DevExpress.Win.RichEdit" Version="25.1.6" />
+    <PackageReference Include="DevExpress.Win.Scheduler" Version="25.1.6" />
+  </ItemGroup>
+</Project>

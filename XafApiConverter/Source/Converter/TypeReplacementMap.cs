@@ -59,6 +59,11 @@ namespace XafApiConverter.Converter {
                 null,
                 "Maps.Web has no Blazor equivalent - should be removed") },
 
+            { "DevExpress.ExpressApp.TreeListEditors.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.TreeListEditors.Web",
+                null,
+                "TreeListEditors.Web has no Blazor equivalent - should be removed") },
+
             { "DevExpress.ExpressApp.Chart.Web", new PackageReplacement(
                 "DevExpress.ExpressApp.Chart.Web",
                 null,
