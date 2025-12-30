@@ -10,12 +10,12 @@ namespace Test.Module.BO {
         public string ActivityInformation { get; set; }
     }
 
-    // TODO: The 'UnProtectedHeir' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'UnProtectedHeir' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Type 'DevExpress.ExpressApp.Workflow.ActivityInformation' has no equivalent in XAF .NET
-    //     ActivityInformation has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Workflow.ActivityInformation' has no equivalent in XAF for .NET
+    //     ActivityInformation has no equivalent in XAF for .NET (loaded from removed-api.txt)
     // ========== COMMENTED OUT CLASS ==========
     // internal class UnProtectedHeir : ActivityInformation {
     //         // Removed class
@@ -25,12 +25,12 @@ namespace Test.Module.BO {
     // ========================================
 
 
-    // TODO: The 'UnProtectedHeir2' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'UnProtectedHeir2' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Type 'DevExpress.ExpressApp.Workflow.ActivityInformation' has no equivalent in XAF .NET
-    //     ActivityInformation has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Workflow.ActivityInformation' has no equivalent in XAF for .NET
+    //     ActivityInformation has no equivalent in XAF for .NET (loaded from removed-api.txt)
     // ========== COMMENTED OUT CLASS ==========
     // internal class UnProtectedHeir2 {
     //         // Removed class

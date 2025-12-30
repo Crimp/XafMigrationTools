@@ -1,11 +1,11 @@
 ﻿namespace SecurityDemo.Win
 {
-    // TODO: The 'SecurityDemoWindowsFormsApplication' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'SecurityDemoWindowsFormsApplication' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Type 'DevExpress.ExpressApp.Objects.BusinessClassLibraryCustomizationModule' has no equivalent in XAF .NET
-    //     BusinessClassLibraryCustomizationModule has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Objects.BusinessClassLibraryCustomizationModule' has no equivalent in XAF for .NET
+    //     BusinessClassLibraryCustomizationModule has no equivalent in XAF for .NET (loaded from removed-api.txt)
     partial class SecurityDemoWindowsFormsApplication
     {
         /// <summary> 

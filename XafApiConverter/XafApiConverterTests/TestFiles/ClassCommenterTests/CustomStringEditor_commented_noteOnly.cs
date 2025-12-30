@@ -10,14 +10,14 @@ using FeatureCenter.Module.PropertyEditors;
 using DevExpress.ExpressApp.Model;
 
 namespace FeatureCenter.Module.Web.PropertyEditors {
-    // TODO: The 'CustomStringEditor' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'CustomStringEditor' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
     //   - Type 'ASPxPropertyEditor' has no equivalent (inferred from using DevExpress.ExpressApp.Web.Editors.ASPx)
-    //     ASPxPropertyEditor has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //     ASPxPropertyEditor has no equivalent in XAF for .NET (loaded from removed-api.txt)
     //   - Type 'RenderHelper' has no equivalent (inferred from using DevExpress.ExpressApp.Web)
-    //     RenderHelper has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //     RenderHelper has no equivalent in XAF for .NET (loaded from removed-api.txt)
     [PropertyEditor(typeof(String), FeatureCenterEditorAliases.CustomStringEditor, false)]
 	public class CustomStringEditor : ASPxPropertyEditor {
         ASPxComboBox dropDownControl = null;

@@ -192,7 +192,7 @@ namespace XafApiConverter.Converter {
                             problems.Add(new TypeProblem {
                                 TypeName = typeName,
                                 FullTypeName = fullTypeName,
-                                Reason = $"Type '{fullTypeName}' has no equivalent in XAF .NET",
+                                Reason = $"Type '{fullTypeName}' has no equivalent in XAF for .NET",
                                 Description = noEquivType.Description,
                                 Severity = ProblemSeverity.Critical,
                                 RequiresCommentOut = noEquivType.CommentOutEntireClass
@@ -298,7 +298,7 @@ namespace XafApiConverter.Converter {
                 problems.Add(new TypeProblem {
                     TypeName = typeName,
                     FullTypeName = fullTypeName,
-                    Reason = $"Type '{fullTypeName}' has no equivalent in XAF .NET",
+                    Reason = $"Type '{fullTypeName}' has no equivalent in XAF for .NET",
                     Description = matchingNoEquiv.Description,
                     Severity = ProblemSeverity.Critical,
                     RequiresCommentOut = matchingNoEquiv.CommentOutEntireClass
@@ -332,8 +332,8 @@ namespace XafApiConverter.Converter {
                     problems.Add(new TypeProblem {
                         TypeName = typeName,
                         FullTypeName = fullTypeName,
-                        Reason = $"Class '{typeName}' has no equivalent in XAF .NET",
-                        Description = $"{assemblyName} assembly is removed in v25.2",
+                        Reason = $"Class '{typeName}' has no equivalent in XAF for .NET",
+                        Description = $"{assemblyName} assembly was removed in v25.2 or is not supported in XAF for .NET",
                         Severity = ProblemSeverity.Critical,
                         RequiresCommentOut = true
                     });

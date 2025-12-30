@@ -17,12 +17,12 @@ using DevExpress.ExpressApp.Blazor.Templates;
 using DevExpress.ExpressApp.Blazor;
 
 namespace FeatureCenter.Module.Web.ListEditors {
-    // TODO: The 'ASPxCustomListEditorButton' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'ASPxCustomListEditorButton' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Class 'ASPxButton' has no equivalent in XAF .NET
-    //     DevExpress.Web.v25.1 assembly is removed in v25.2
+    //   - Class 'ASPxButton' has no equivalent in XAF for .NET
+    //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
     // ========== COMMENTED OUT CLASS ==========
     // public class ASPxCustomListEditorButton : ASPxButton {
     //         private string pictureID;
@@ -37,24 +37,24 @@ namespace FeatureCenter.Module.Web.ListEditors {
         public IPictureItem ItemClicked;
     }
 
-    // TODO: The 'ASPxCustomListEditorControl' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'ASPxCustomListEditorControl' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Type 'DevExpress.ExpressApp.Web.Templates.IXafCallbackHandler' has no equivalent in XAF .NET
-    //     IXafCallbackHandler has no equivalent in XAF .NET (loaded from removed-api.txt)
-    //   - Type 'DevExpress.ExpressApp.Web.Templates.XafCallbackManager' has no equivalent in XAF .NET
-    //     XafCallbackManager has no equivalent in XAF .NET (loaded from removed-api.txt)
-    //   - Type 'DevExpress.ExpressApp.Web.Templates.ICallbackManagerHolder' has no equivalent in XAF .NET
-    //     ICallbackManagerHolder has no equivalent in XAF .NET (loaded from removed-api.txt)
-    //   - Type 'DevExpress.ExpressApp.Web.ImageInfoEventArgs' has no equivalent in XAF .NET
-    //     ImageInfoEventArgs has no equivalent in XAF .NET (loaded from removed-api.txt)
-    //   - Type 'DevExpress.ExpressApp.Web.ImageResourceHttpHandler' has no equivalent in XAF .NET
+    //   - Type 'DevExpress.ExpressApp.Web.Templates.IXafCallbackHandler' has no equivalent in XAF for .NET
+    //     IXafCallbackHandler has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Web.Templates.XafCallbackManager' has no equivalent in XAF for .NET
+    //     XafCallbackManager has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Web.Templates.ICallbackManagerHolder' has no equivalent in XAF for .NET
+    //     ICallbackManagerHolder has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Web.ImageInfoEventArgs' has no equivalent in XAF for .NET
+    //     ImageInfoEventArgs has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Web.ImageResourceHttpHandler' has no equivalent in XAF for .NET
     //     ImageResourceHttpHandler has no Blazor equivalent (Web Forms specific HTTP handler)
-    //   - Type 'DevExpress.ExpressApp.Web.WebImageHelper' has no equivalent in XAF .NET
-    //     WebImageHelper has no equivalent in XAF .NET (loaded from removed-api.txt)
-    //   - Class 'Paddings' has no equivalent in XAF .NET
-    //     DevExpress.Web.v25.1 assembly is removed in v25.2
+    //   - Type 'DevExpress.ExpressApp.Web.WebImageHelper' has no equivalent in XAF for .NET
+    //     WebImageHelper has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Class 'Paddings' has no equivalent in XAF for .NET
+    //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
     // ========== COMMENTED OUT CLASS ==========
     // public class ASPxCustomListEditorControl : Panel, INamingContainer, IXafCallbackHandler {
     //         private IList dataSource;
@@ -197,9 +197,9 @@ namespace FeatureCenter.Module.Web.ListEditors {
         }
     }
 
-    // TODO: The 'ASPxCustomListEditor' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'ASPxCustomListEditor' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
     //   - Depends on problematic class 'FeatureCenter.Module.Web.ListEditors.ASPxCustomListEditorControl' which has no .NET equivalent
     //     Class uses 'FeatureCenter.Module.Web.ListEditors.ASPxCustomListEditorControl' which is being commented out due to having no .NET equivalent

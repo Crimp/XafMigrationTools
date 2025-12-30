@@ -27,18 +27,18 @@ namespace XafApiConverter.Converter {
 
         public static string GetTodoClassCommentedComment(string className) {
             var sb = new StringBuilder();
-            sb.AppendLine($"// TODO: The '{className}' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.");
+            sb.AppendLine($"// TODO: The '{className}' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.");
             sb.AppendLine("//       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589");
-            sb.AppendLine("//       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.");
+            sb.AppendLine("//       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET");
             //sb.AppendLine("//       Refer to the migration documentation for guidance on handling such cases.");
             return sb.ToString();
         }
 
         public static string GetTodoClassWithIssuesComment(string className) {
             var sb = new StringBuilder();
-            sb.AppendLine($"// TODO: The '{className}' class has been marked automatically due to usage of types that have no XAF .NET equivalent.");
+            sb.AppendLine($"// TODO: The '{className}' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.");
             sb.AppendLine("//       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589");
-            sb.AppendLine("//       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.");
+            sb.AppendLine("//       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET");
             //sb.AppendLine("//       Refer to the migration documentation for guidance on handling such cases.");
             return sb.ToString();
         }

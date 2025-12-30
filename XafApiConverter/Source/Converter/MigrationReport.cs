@@ -84,7 +84,7 @@ namespace XafApiConverter.Converter {
                 sb.AppendLine("## 🤖 Automatic Actions Taken");
                 sb.AppendLine();
                 sb.AppendLine($"The tool automatically commented out **{ClassesCommented} classes** that use types ");
-                sb.AppendLine("with no XAF .NET equivalents (TRANS-010 lightweight implementation).");
+                sb.AppendLine("with no XAF for .NET equivalents (TRANS-010 lightweight implementation).");
                 sb.AppendLine();
                 sb.AppendLine("**Commented Classes:**");
                 foreach (var className in CommentedClassNames.OrderBy(c => c)) {
@@ -94,7 +94,7 @@ namespace XafApiConverter.Converter {
                 sb.AppendLine("**Format Used:**");
                 sb.AppendLine("```csharp");
                 sb.AppendLine($"{ClassCommenter.GetTodoClassCommentedComment("ClassName")}");
-                sb.AppendLine("// NOTE: Class commented out due to types having no XAF .NET equivalent");
+                sb.AppendLine("// NOTE: Class commented out due to types having no XAF for .NET equivalent");
                 sb.AppendLine("//   - [Reason for each problematic type]");
                 sb.AppendLine("/*");
                 sb.AppendLine("public class ClassName { ... }");
@@ -122,9 +122,9 @@ namespace XafApiConverter.Converter {
                     .ToList();
 
                 if (noEquivalentClasses.Any()) {
-                    sb.AppendLine("## ⚠️ Classes with Types Having No XAF .NET Equivalent");
+                    sb.AppendLine("## ⚠️ Classes with Types Having no XAF for .NET Equivalent");
                     sb.AppendLine();
-                    sb.AppendLine($"Found **{noEquivalentClasses.Count} classes** that use types with NO XAF .NET equivalent.");
+                    sb.AppendLine($"Found **{noEquivalentClasses.Count} classes** that use types with no XAF for .NET equivalent.");
                     sb.AppendLine("These require commenting out or complete refactoring:");
                     sb.AppendLine();
 
@@ -171,7 +171,7 @@ namespace XafApiConverter.Converter {
                 if (manualConversionClasses.Any()) {
                     sb.AppendLine("## 🔧 Classes with Types Having XAF .NET Equivalents (Manual Conversion Required)");
                     sb.AppendLine();
-                    sb.AppendLine($"Found **{manualConversionClasses.Count} classes** that use types with XAF .NET equivalents ");
+                    sb.AppendLine($"Found **{manualConversionClasses.Count} classes** that use types with XAF for .NET equivalents ");
                     sb.AppendLine("but automatic conversion is not possible. These require manual refactoring:");
                     sb.AppendLine();
 

@@ -9,12 +9,12 @@ using DevExpress.Persistent.Validation;
 using DevExpress.ExpressApp.Model;
 
 namespace FeatureCenter.Module.KeyProperty {
-    // TODO: The 'StringKeyPropertyObject' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'StringKeyPropertyObject' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Type 'DevExpress.Persistent.BaseImpl.DistributedIdGeneratorHelper' has no equivalent in XAF .NET
-    //     DistributedIdGeneratorHelper has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.Persistent.BaseImpl.DistributedIdGeneratorHelper' has no equivalent in XAF for .NET
+    //     DistributedIdGeneratorHelper has no equivalent in XAF for .NET (loaded from removed-api.txt)
     [Persistent]
 	[ImageName("KeyProperties.Demo_KeyProperty_String")]
 	[FriendlyKeyProperty(nameof(Key))]

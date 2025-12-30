@@ -21,14 +21,14 @@ namespace FeatureCenter.Module.Notifications {
         public SchedulerNotifications(Session session) : base(session) { }
     }
 
-    // TODO: The 'TaskWithNotifications' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'TaskWithNotifications' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Type 'DevExpress.Persistent.Base.General.TaskImpl' has no equivalent in XAF .NET
-    //     TaskImpl has no equivalent in XAF .NET (loaded from removed-api.txt)
-    //   - Type 'DevExpress.Persistent.Base.General.TaskStatus' has no equivalent in XAF .NET
-    //     TaskStatus has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.Persistent.Base.General.TaskImpl' has no equivalent in XAF for .NET
+    //     TaskImpl has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.Persistent.Base.General.TaskStatus' has no equivalent in XAF for .NET
+    //     TaskStatus has no equivalent in XAF for .NET (loaded from removed-api.txt)
     [NavigationItem(false)]
     [ImageName("Notifications.Task_with_notifications")]
     public class TaskWithNotifications : BaseObject, ISupportNotifications {

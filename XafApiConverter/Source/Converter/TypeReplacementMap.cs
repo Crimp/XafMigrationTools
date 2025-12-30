@@ -343,8 +343,8 @@ namespace XafApiConverter.Converter {
         };
 
         /// <summary>
-        /// Types with NO XAF .NET equivalent (TRANS-009)
-        /// These types have no equivalents in XAF .NET and require commenting out entire classes.
+        /// Types with no XAF for .NET equivalent (TRANS-009)
+        /// These types have no equivalents in XAF for .NET and require commenting out entire classes.
         /// This collection is dynamically populated from removed-api.txt and can be manually extended.
         /// 
         /// CASCADE DEPENDENCIES:
@@ -665,7 +665,7 @@ namespace XafApiConverter.Converter {
                             null, // No equivalent
                             namespaceName,
                             null,
-                            $"{typeName} has no equivalent in XAF .NET (loaded from removed-api.txt)",
+                            $"{typeName} has no equivalent in XAF for .NET (loaded from removed-api.txt)",
                             new[] { ".cs" },
                             commentOutEntireClass: true);
                     }

@@ -6,14 +6,14 @@ using FeatureCenter.Module.PropertyEditors;
 using DevExpress.ExpressApp.Model;
 
 namespace FeatureCenter.Module.Web.PropertyEditors {
-    // TODO: The 'CustomIntegerEditor' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'CustomIntegerEditor' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
     //   - Type 'WebPropertyEditor' has no equivalent (inferred from using DevExpress.ExpressApp.Web.Editors)
-    //     WebPropertyEditor has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //     WebPropertyEditor has no equivalent in XAF for .NET (loaded from removed-api.txt)
     //   - Type 'ITestable' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)
-    //     ITestable has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //     ITestable has no equivalent in XAF for .NET (loaded from removed-api.txt)
     //   - Type 'IJScriptTestControl' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)
     //     IJScriptTestControl has no Blazor equivalent (Test framework specific)
     // ========== COMMENTED OUT CLASS ==========
@@ -76,16 +76,16 @@ namespace FeatureCenter.Module.Web.PropertyEditors {
             }
         }
     }
-    // TODO: The 'JSCustomLabelTestControl' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'JSCustomLabelTestControl' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
     //   - Type 'IJScriptTestControl' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)
     //     IJScriptTestControl has no Blazor equivalent (Test framework specific)
     //   - Type 'StandardTestControlScriptsDeclaration' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)
-    //     StandardTestControlScriptsDeclaration has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //     StandardTestControlScriptsDeclaration has no equivalent in XAF for .NET (loaded from removed-api.txt)
     //   - Type 'TestScriptsDeclarationBase' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)
-    //     TestScriptsDeclarationBase has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //     TestScriptsDeclarationBase has no equivalent in XAF for .NET (loaded from removed-api.txt)
     // ========== COMMENTED OUT CLASS ==========
     // public class JSCustomLabelTestControl : IJScriptTestControl {
     //         public const string ClassName = "CustomLabelTestControl";
@@ -107,16 +107,16 @@ namespace FeatureCenter.Module.Web.PropertyEditors {
     // ========================================
 
 
-    // TODO: The 'JSCustomDropDownListTestControl' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'JSCustomDropDownListTestControl' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
     //   - Type 'IJScriptTestControl' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)
     //     IJScriptTestControl has no Blazor equivalent (Test framework specific)
     //   - Type 'StandardTestControlScriptsDeclaration' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)
-    //     StandardTestControlScriptsDeclaration has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //     StandardTestControlScriptsDeclaration has no equivalent in XAF for .NET (loaded from removed-api.txt)
     //   - Type 'TestScriptsDeclarationBase' has no equivalent (inferred from using DevExpress.ExpressApp.Web.TestScripts)
-    //     TestScriptsDeclarationBase has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //     TestScriptsDeclarationBase has no equivalent in XAF for .NET (loaded from removed-api.txt)
     // ========== COMMENTED OUT CLASS ==========
     // public class JSCustomDropDownListTestControl : IJScriptTestControl {
     //         public const string ClassName = "CustomDropDownListTestControl";

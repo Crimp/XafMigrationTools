@@ -17,9 +17,9 @@ using DevExpress.ExpressApp.Blazor.Templates;
 using DevExpress.ExpressApp.Blazor;
 
 namespace FeatureCenter.Module.Web.ListEditors {
-    // TODO: The 'ASPxCustomListEditor2' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'ASPxCustomListEditor2' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
     //   - Depends on problematic class 'FeatureCenter.Module.Web.ListEditors.ASPxCustomListEditorControl2' which has no .NET equivalent
     //     Class uses 'FeatureCenter.Module.Web.ListEditors.ASPxCustomListEditorControl2' which is being commented out due to having no .NET equivalent

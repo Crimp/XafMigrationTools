@@ -7,16 +7,16 @@ using DevExpress.Persistent.Base.General;
 using DevExpress.ExpressApp.Security.Strategy;
 
 namespace MainDemo.Module.DatabaseUpdate {
-    // TODO: The 'Updater' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+    // TODO: The 'Updater' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
-    //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
+    //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Type 'DevExpress.ExpressApp.Kpi.KpiDefinition' has no equivalent in XAF .NET
-    //     KpiDefinition has no equivalent in XAF .NET (loaded from removed-api.txt)
-    //   - Type 'DevExpress.ExpressApp.Kpi.DateRangeRepository' has no equivalent in XAF .NET
-    //     DateRangeRepository has no equivalent in XAF .NET (loaded from removed-api.txt)
-    //   - Type 'DevExpress.ExpressApp.Kpi.TimeIntervalType' has no equivalent in XAF .NET
-    //     TimeIntervalType has no equivalent in XAF .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Kpi.KpiDefinition' has no equivalent in XAF for .NET
+    //     KpiDefinition has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Kpi.DateRangeRepository' has no equivalent in XAF for .NET
+    //     DateRangeRepository has no equivalent in XAF for .NET (loaded from removed-api.txt)
+    //   - Type 'DevExpress.ExpressApp.Kpi.TimeIntervalType' has no equivalent in XAF for .NET
+    //     TimeIntervalType has no equivalent in XAF for .NET (loaded from removed-api.txt)
     public class Updater : DevExpress.ExpressApp.Updating.ModuleUpdater {
 
         static Updater() {
