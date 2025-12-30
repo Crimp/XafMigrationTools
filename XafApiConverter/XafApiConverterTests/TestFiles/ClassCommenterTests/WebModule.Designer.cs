@@ -1,4 +1,4 @@
-namespace FeatureCenter.Module.Web
+﻿namespace FeatureCenter.Module.Web
 {
     partial class FeatureCenterAspNetModule
     {

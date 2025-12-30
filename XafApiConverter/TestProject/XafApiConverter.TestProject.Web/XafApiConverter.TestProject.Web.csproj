@@ -70,6 +70,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestClass_1.cs" />
+    <Compile Include="WebModule.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WebModule.Designer.cs">
+      <DependentUpon>WebModule.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XafApiConverter.TestProject\XafApiConverter.TestProject.csproj">
@@ -119,6 +125,9 @@
     <PackageReference Include="DevExpress.ExpressApp.Maps.Web" Version="25.1.*-*" />
     <PackageReference Include="DevExpress.ExpressApp.Office.Web" Version="25.1.*-*" />
     <PackageReference Include="DevExpress.ExpressApp.ReportsV2.Web" Version="25.1.*-*" />
+    <PackageReference Include="DevExpress.ExpressApp.TreeListEditors.Web">
+      <Version>25.1.6</Version>
+    </PackageReference>
     <PackageReference Include="DevExpress.ExpressApp.Validation.Web" Version="25.1.*-*" />
     <PackageReference Include="DevExpress.ExpressApp.Chart.Web" Version="25.1.*-*" />
     <PackageReference Include="DevExpress.ExpressApp.FileAttachment.Web" Version="25.1.*-*" />
@@ -128,5 +137,10 @@
     <PackageReference Include="DevExpress.ExpressApp.Security" Version="25.1.*-*" />
     <PackageReference Include="DevExpress.Persistent.BaseImpl.Xpo" Version="25.1.*-*" />
     <PackageReference Include="DevExpress.Office.Core" Version="25.1.*-*" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebModule.resx">
+      <DependentUpon>WebModule.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
