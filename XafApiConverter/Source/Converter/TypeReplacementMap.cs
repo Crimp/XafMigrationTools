@@ -545,10 +545,6 @@ namespace XafApiConverter.Converter {
 
         /// <summary>
         /// Protected base classes - classes that inherit from these receive WARNING comments but are NOT automatically commented out.
-        /// 
-        /// CRITICAL BEHAVIOR:
-        /// ==================
-        /// These are critical XAF base classes that must be preserved for manual refactoring because:
         /// 1. They are essential for application structure (ModuleBase, XafApplication, etc.)
         /// 2. They contain business logic that cannot be automatically migrated
         /// 3. Commenting them out would break the application completely
@@ -557,27 +553,6 @@ namespace XafApiConverter.Converter {
         /// - A WARNING comment is added above the class declaration
         /// - The class itself is NOT commented out
         /// - Developer must manually review and refactor
-        /// 
-        /// Example output:
-        /// <code>
-        /// // NOTE: Class has no XAF .NET equivalent
-        /// //   - Type 'ScriptRecorderAspNetModule' has no equivalent in XAF .NET
-        /// //   - Type 'KpiModule' has no equivalent in XAF .NET
-        /// // TODO: It is necessary to test the application's behavior and, if necessary, develop a new solution.
-        /// public class MyModule : ModuleBase { ... }  // ← Class remains active!
-        /// </code>
-        /// 
-        /// IMPORTANT NOTES:
-        /// ================
-        /// 1. Case-insensitive matching is used (StringComparer.OrdinalIgnoreCase)
-        /// 2. Generic types are matched without type parameters (e.g., "ViewController" matches "ViewController<T>")
-        /// 3. Matching is done on base class names ONLY, not on full type paths
-        /// 4. If a protected class inherits from a no-equivalent type, only the no-equivalent parts get warnings
-        /// 5. This collection is dynamically populated from ProtectedTypes.txt embedded resource
-        /// 
-        /// TESTING:
-        /// ========
-        /// See ClassCommenterTests.TestProtectedBaseClass_NotCommented_WithWarning for validation
         /// </summary>
         public static readonly HashSet<string> ProtectedBaseClasses = new(StringComparer.OrdinalIgnoreCase) {
             // Manually defined protected base classes - these are always protected

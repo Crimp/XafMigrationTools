@@ -11,11 +11,12 @@ using SecurityDemo.Module;
 namespace SecurityDemo.Win
 {
     // TODO: The 'SecurityDemoWindowsFormsApplication' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Type 'DevExpress.ExpressApp.Objects.BusinessClassLibraryCustomizationModule' has no equivalent in XAF .NET
     //     BusinessClassLibraryCustomizationModule has no equivalent in XAF .NET (loaded from removed-api.txt)
-public partial class SecurityDemoWindowsFormsApplication : WinApplication
+    public partial class SecurityDemoWindowsFormsApplication : WinApplication
     {
         public SecurityDemoWindowsFormsApplication()
         {

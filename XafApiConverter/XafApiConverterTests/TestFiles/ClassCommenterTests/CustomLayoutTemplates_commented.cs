@@ -6,6 +6,7 @@ using DevExpress.Web;
 
 namespace FeatureCenter.Module.Web.Layout {
     // TODO: The 'CustomLayoutItemTemplate' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Type 'LayoutItemTemplate' has no equivalent (inferred from using DevExpress.ExpressApp.Web.Layout)
@@ -34,6 +35,7 @@ namespace FeatureCenter.Module.Web.Layout {
     // ========================================
 
     // TODO: The 'CustomLayoutGroupTemplate' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Type 'LayoutGroupTemplate' has no equivalent (inferred from using DevExpress.ExpressApp.Web.Layout)
@@ -77,6 +79,7 @@ namespace FeatureCenter.Module.Web.Layout {
     // ========================================
 
     // TODO: The 'CustomLayoutTabbedGroupTemplate' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Type 'TabbedGroupTemplate' has no equivalent (inferred from using DevExpress.ExpressApp.Web.Layout)

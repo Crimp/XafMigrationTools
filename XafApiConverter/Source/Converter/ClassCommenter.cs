@@ -28,6 +28,7 @@ namespace XafApiConverter.Converter {
         public static string GetTodoClassCommentedComment(string className) {
             var sb = new StringBuilder();
             sb.AppendLine($"// TODO: The '{className}' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.");
+            sb.AppendLine("//       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589");
             sb.AppendLine("//       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.");
             //sb.AppendLine("//       Refer to the migration documentation for guidance on handling such cases.");
             return sb.ToString();
@@ -36,6 +37,7 @@ namespace XafApiConverter.Converter {
         public static string GetTodoClassWithIssuesComment(string className) {
             var sb = new StringBuilder();
             sb.AppendLine($"// TODO: The '{className}' class has been marked automatically due to usage of types that have no XAF .NET equivalent.");
+            sb.AppendLine("//       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589");
             sb.AppendLine("//       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.");
             //sb.AppendLine("//       Refer to the migration documentation for guidance on handling such cases.");
             return sb.ToString();
@@ -203,10 +205,22 @@ namespace XafApiConverter.Converter {
                 // Build the formatted comment
                 var formattedComment = FormatWarningComment(warningComment, baseIndent);
 
-                // Insert the comment
+                // Insert the comment and fix whitespace after it
                 var beforeComment = content.Substring(0, insertPosition);
-                var afterComment = content.Substring(insertPosition);
-                var newContent = beforeComment + formattedComment + afterComment;
+                var afterCommentStart = insertPosition;
+                
+                // Skip any whitespace (tabs/spaces) that was the original indentation
+                while (afterCommentStart < content.Length) {
+                    var ch = content[afterCommentStart];
+                    if (ch != ' ' && ch != '\t') {
+                        break;
+                    }
+                    afterCommentStart++;
+                }
+                
+                var afterComment = content.Substring(afterCommentStart);
+                // Add back the correct indentation (spaces instead of tabs)
+                var newContent = beforeComment + formattedComment + baseIndent + afterComment;
 
                 // Save file
                 File.WriteAllText(filePath, newContent, Encoding.UTF8);
@@ -282,20 +296,37 @@ namespace XafApiConverter.Converter {
             // If class has attributes, insert before first attribute
             if (classDecl.AttributeLists.Count > 0) {
                 var firstAttribute = classDecl.AttributeLists[0];
-                return firstAttribute.SpanStart;
+                // Find the start of the line containing the attribute
+                var attributeStart = firstAttribute.SpanStart;
+                var lineStart = FindLineStart(content, attributeStart);
+                return lineStart;
             }
 
-            // Otherwise, insert before the class declaration
-            // But after any leading trivia (to preserve indentation)
-            var leadingTrivia = classDecl.GetLeadingTrivia();
-            var lastNewLineTrivia = leadingTrivia.LastOrDefault(t => 
-                t.IsKind(SyntaxKind.EndOfLineTrivia));
+            // Otherwise, find the start of the line containing the class declaration
+            var classStart = classDecl.SpanStart;
+            return FindLineStart(content, classStart);
+        }
 
-            if (lastNewLineTrivia != default(SyntaxTrivia)) {
-                return lastNewLineTrivia.Span.End;
+        /// <summary>
+        /// Find the start of the line containing the given position
+        /// </summary>
+        private int FindLineStart(string content, int position) {
+            // Move backwards to find the newline character before this position
+            var lineStart = position;
+            while (lineStart > 0) {
+                var ch = content[lineStart - 1];
+                if (ch == '\n') {
+                    // Found newline, return position after it
+                    return lineStart;
+                }
+                if (ch != ' ' && ch != '\t' && ch != '\r') {
+                    // Hit non-whitespace, shouldn't happen in valid code
+                    // but return current position as fallback
+                    break;
+                }
+                lineStart--;
             }
-
-            return classDecl.SpanStart;
+            return lineStart;
         }
 
         /// <summary>
@@ -306,7 +337,8 @@ namespace XafApiConverter.Converter {
             var lastWhitespace = leadingTrivia.LastOrDefault(t => t.IsKind(SyntaxKind.WhitespaceTrivia));
             
             if (lastWhitespace != default(SyntaxTrivia)) {
-                return lastWhitespace.ToString();
+                // Convert tabs to spaces (tab = 4 spaces) for consistent formatting
+                return lastWhitespace.ToString().Replace("\t", "    ");
             }
 
             return string.Empty;
@@ -320,12 +352,8 @@ namespace XafApiConverter.Converter {
             
             var lines = comment.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-            bool isFirstLine = true;
             foreach (var line in lines) {
-                if(!isFirstLine) {
-                    sb.Append(baseIndent);
-                }
-                isFirstLine = false;
+                sb.Append(baseIndent);
                 sb.AppendLine(line);
             }
             
@@ -525,7 +553,9 @@ namespace XafApiConverter.Converter {
                 var commentedClass = BuildCommentedClassText(comment, classText, leadingTrivia);
 
                 // STEP 9: Replace in content using SPAN positions
-                var beforeClass = content.Substring(0, classStartPosition);
+                // Find the start of the line to remove original whitespace
+                var lineStart = FindLineStart(content, classStartPosition);
+                var beforeClass = content.Substring(0, lineStart);
                 var afterClass = content.Length > classStartPosition + classLength
                     ? content.Substring(classStartPosition + classLength)
                     : string.Empty;
@@ -634,7 +664,9 @@ namespace XafApiConverter.Converter {
                 
                 var commentedClass = BuildCommentedClassText(comment, classText, leadingTrivia);
                 
-                var beforeClass = content.Substring(0, classStartPosition);
+                // Find the start of the line to remove original whitespace
+                var lineStart = FindLineStart(content, classStartPosition);
+                var beforeClass = content.Substring(0, lineStart);
                 var afterClass = content.Length > classStartPosition + classLength
                     ? content.Substring(classStartPosition + classLength)
                     : string.Empty;
@@ -1034,17 +1066,13 @@ namespace XafApiConverter.Converter {
             var baseIndent = string.Empty;
             var lastWhitespace = leadingTrivia.LastOrDefault(t => t.IsKind(SyntaxKind.WhitespaceTrivia));
             if (lastWhitespace != default(SyntaxTrivia)) {
-                baseIndent = lastWhitespace.ToString();
+                // Convert tabs to spaces (tab = 4 spaces) for consistent formatting
+                baseIndent = lastWhitespace.ToString().Replace("\t", "    ");
             }
-            
-            bool isFirstLine = true;
 
             // Add comment header
             foreach (var line in commentHeader.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries)) {
-                if(!isFirstLine) { 
-                    sb.Append(baseIndent);
-                }
-                isFirstLine = false;
+                sb.Append(baseIndent);
                 sb.AppendLine(line);
             }
             

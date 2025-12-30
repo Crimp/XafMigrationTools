@@ -1,4 +1,4 @@
-using DevExpress.ExpressApp;
+﻿using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.Actions;
 using DevExpress.ExpressApp.Filtering;
 using DevExpress.ExpressApp.Model;
@@ -22,13 +22,14 @@ namespace FeatureCenter.Module.Notifications {
     }
 
     // TODO: The 'TaskWithNotifications' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Type 'DevExpress.Persistent.Base.General.TaskImpl' has no equivalent in XAF .NET
     //     TaskImpl has no equivalent in XAF .NET (loaded from removed-api.txt)
     //   - Type 'DevExpress.Persistent.Base.General.TaskStatus' has no equivalent in XAF .NET
     //     TaskStatus has no equivalent in XAF .NET (loaded from removed-api.txt)
-[NavigationItem(false)]
+    [NavigationItem(false)]
     [ImageName("Notifications.Task_with_notifications")]
     public class TaskWithNotifications : BaseObject, ISupportNotifications {
         private TaskImpl task = new TaskImpl();

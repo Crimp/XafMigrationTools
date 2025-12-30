@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using DevExpress.ExpressApp.Editors;
@@ -18,6 +18,7 @@ using DevExpress.ExpressApp.Blazor;
 
 namespace FeatureCenter.Module.Web.ListEditors {
     // TODO: The 'ASPxCustomListEditorButton' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Class 'ASPxButton' has no equivalent in XAF .NET
@@ -37,6 +38,7 @@ namespace FeatureCenter.Module.Web.ListEditors {
     }
 
     // TODO: The 'ASPxCustomListEditorControl' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Type 'DevExpress.ExpressApp.Web.Templates.IXafCallbackHandler' has no equivalent in XAF .NET
@@ -196,6 +198,7 @@ namespace FeatureCenter.Module.Web.ListEditors {
     }
 
     // TODO: The 'ASPxCustomListEditor' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Depends on problematic class 'FeatureCenter.Module.Web.ListEditors.ASPxCustomListEditorControl' which has no .NET equivalent

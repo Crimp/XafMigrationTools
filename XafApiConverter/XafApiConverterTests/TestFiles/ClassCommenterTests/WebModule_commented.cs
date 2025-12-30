@@ -7,6 +7,7 @@ using DevExpress.Persistent.Base;
 
 namespace FeatureCenter.Module.Web {
     // TODO: The 'FeatureCenterAspNetModule' class has been marked automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Type 'DevExpress.ExpressApp.Chart.Web.ChartAspNetModule' has no equivalent in XAF .NET
@@ -15,7 +16,7 @@ namespace FeatureCenter.Module.Web {
     //     PivotGridAspNetModule has no equivalent in XAF .NET (loaded from removed-api.txt)
     //   - Type 'DevExpress.ExpressApp.Maps.Web.MapsAspNetModule' has no equivalent in XAF .NET
     //     MapsAspNetModule has no Blazor equivalent
-[ToolboxItemFilter("Xaf.Platform.Web")]
+    [ToolboxItemFilter("Xaf.Platform.Web")]
     public sealed partial class FeatureCenterAspNetModule : ModuleBase {
         public FeatureCenterAspNetModule() {
             InitializeComponent();

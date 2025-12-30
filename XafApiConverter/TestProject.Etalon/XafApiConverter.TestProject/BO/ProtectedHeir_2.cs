@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,7 @@ namespace Test.Module.BO {
     }
 
     // TODO: The 'UnProtectedHeir' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Type 'DevExpress.ExpressApp.Workflow.ActivityInformation' has no equivalent in XAF .NET
@@ -25,6 +26,7 @@ namespace Test.Module.BO {
 
 
     // TODO: The 'UnProtectedHeir2' class has been commented out automatically due to usage of types that have no XAF .NET equivalent.
+    //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF .NET.
     // NOTE:
     //   - Type 'DevExpress.ExpressApp.Workflow.ActivityInformation' has no equivalent in XAF .NET
