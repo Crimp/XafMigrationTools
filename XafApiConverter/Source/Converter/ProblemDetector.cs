@@ -16,28 +16,32 @@ namespace XafApiConverter.Converter {
         /// </summary>
         public List<ProblematicClass> FindClassesWithNoEquivalentTypes(Project project) {
             var problematicClasses = new List<ProblematicClass>();
-
             foreach(var document in project.Documents) {
                 if(!document.FilePath.EndsWith(".cs")) continue;
 
                 var syntaxTree = document.GetSyntaxTreeAsync().Result;
-                if(syntaxTree == null) continue;
+                if(syntaxTree == null) {
+                    continue;
+                }
 
                 var root = syntaxTree.GetRoot();
                 var semanticModel = document.GetSemanticModelAsync().Result;
-                if(semanticModel == null) continue;
+                if(semanticModel == null) {
+                    continue;
+                }
 
                 // Find class declarations
                 var classes = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
 
                 foreach(var classDecl in classes) {
                     var problems = AnalyzeClass(classDecl, semanticModel, document.FilePath);
+                    
                     if(problems.Any()) {
                         problematicClasses.Add(CreateProblematicClassDescription(classDecl, document.FilePath, problems));
                     }
                 }
             }
-
+            
             return problematicClasses;
         }
 
@@ -276,6 +280,7 @@ namespace XafApiConverter.Converter {
                 string fullTypeName = typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
                     .Replace("global::", "");
                 string containingAssemblyName = typeSymbol.ContainingAssembly?.Name;
+                
                 CheckTypeAgainstMaps(typeName, fullTypeName, containingAssemblyName, problems);
                 return true;
             }
@@ -286,6 +291,19 @@ namespace XafApiConverter.Converter {
         /// Check type against TypeReplacementMap using full type name
         /// </summary>
         private static void CheckTypeAgainstMaps(string typeName, string fullTypeName, string assemblyName, List<TypeProblem> problems) {
+            // Check if type has a replacement (should be migrated, not commented)
+            var matchingReplacement = TypeReplacementMap.TypeReplacements.Values
+                .FirstOrDefault(t => {
+                    var expectedFullName = t.GetFullOldTypeName();
+                    return fullTypeName.Equals(expectedFullName, StringComparison.OrdinalIgnoreCase) ||
+                           fullTypeName.EndsWith($".{expectedFullName}", StringComparison.OrdinalIgnoreCase);
+                });
+
+            if (matchingReplacement != null && matchingReplacement.HasEquivalent) {
+                // Type has a replacement - it will be migrated automatically, don't comment out
+                return;
+            }
+
             // Check NoEquivalentTypes
             var matchingNoEquiv = TypeReplacementMap.NoEquivalentTypes.Values
                 .FirstOrDefault(t => {
@@ -323,11 +341,13 @@ namespace XafApiConverter.Converter {
                     Severity = ProblemSeverity.High,
                     RequiresCommentOut = matchingManual.CommentOutEntireClass
                 });
+                return;
             }
 
-            // Check removed assemblies
+            // Check removed assemblies (ONLY if type not in replacement maps)
             if (assemblyName != null && fullTypeName.StartsWith("DevExpress.")) {
                 string assemblyNameWithoutVersion = GetAssemblyNameWithoutVersion(assemblyName);
+                
                 if (TypeReplacementMap.RemovedAssemblies.Contains(assemblyNameWithoutVersion)) {
                     problems.Add(new TypeProblem {
                         TypeName = typeName,
@@ -340,6 +360,11 @@ namespace XafApiConverter.Converter {
                     return;
                 }
             }
+
+            // DO NOT use fallback assembly inference - it's unreliable
+            // If semantic model cannot resolve the type (assemblyName == null),
+            // we simply skip the check. Better to miss a type than create false positives.
+            // With proper NuGet restore, semantic model should resolve all types correctly.
         }
 
         static string GetAssemblyNameWithoutVersion(string assemblyName) {
@@ -351,9 +376,12 @@ namespace XafApiConverter.Converter {
         }
 
         /// <summary>
-        /// Check type using directives fallback for namespace resolution
+        /// Check type using directives fallback for namespace resolution.
+        /// Only checks explicitly defined NoEquivalentTypes and ManualConversionRequiredTypes.
+        /// DOES NOT infer types from namespaces to avoid false positives.
         /// </summary>
         private static void CheckTypeUsingDirectives(string typeName, HashSet<string> usingDirectives, List<TypeProblem> problems) {
+            // Only check explicitly defined types in our dictionaries
             var candidateTypes = TypeReplacementMap.NoEquivalentTypes.Values
                 .Concat(TypeReplacementMap.ManualConversionRequiredTypes.Values)
                 .Where(t => t.OldType == typeName)
@@ -374,9 +402,13 @@ namespace XafApiConverter.Converter {
                         Severity = isNoEquiv ? ProblemSeverity.Critical : ProblemSeverity.High,
                         RequiresCommentOut = candidateType.CommentOutEntireClass
                     });
-                    break;
+                    return; // Found, no need to continue
                 }
             }
+            
+            // DO NOT infer types from namespaces - too unreliable
+            // If semantic model cannot resolve the type, we skip it
+            // Better to miss a type than to create false positives
         }
 
         /// <summary>

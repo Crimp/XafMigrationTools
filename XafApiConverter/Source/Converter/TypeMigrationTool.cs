@@ -100,10 +100,51 @@ namespace XafApiConverter.Converter {
         }
 
         private void LoadSolution() {
+            // CRITICAL: Restore NuGet packages before loading solution
+            // MSBuildWorkspace requires packages to be restored to build semantic model correctly
+            Console.WriteLine("  Restoring NuGet packages...");
+            RestoreNuGetPackages(_solutionPath);
+            
             var workspace = MSBuildWorkspace.Create();
             _solution = workspace.OpenSolutionAsync(_solutionPath).Result;
             Console.WriteLine($"  Loaded solution: {Path.GetFileName(_solutionPath)}");
             Console.WriteLine($"  Projects: {_solution.Projects.Count()}");
+        }
+        
+        /// <summary>
+        /// Restore NuGet packages for the solution using dotnet restore
+        /// </summary>
+        private void RestoreNuGetPackages(string solutionPath) {
+            try {
+                var processInfo = new System.Diagnostics.ProcessStartInfo {
+                    FileName = "dotnet",
+                    Arguments = $"restore \"{solutionPath}\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WorkingDirectory = Path.GetDirectoryName(solutionPath)
+                };
+
+                using (var process = System.Diagnostics.Process.Start(processInfo)) {
+                    var output = process.StandardOutput.ReadToEnd();
+                    var errors = process.StandardError.ReadToEnd();
+
+                    process.WaitForExit();
+
+                    if (process.ExitCode != 0) {
+                        Console.WriteLine($"  [WARNING] NuGet restore completed with exit code {process.ExitCode}");
+                        if (!string.IsNullOrEmpty(errors)) {
+                            Console.WriteLine($"  [WARNING] Restore errors: {errors}");
+                        }
+                    } else {
+                        Console.WriteLine("  NuGet packages restored successfully");
+                    }
+                }
+            } catch (Exception ex) {
+                Console.WriteLine($"  [WARNING] Failed to restore NuGet packages: {ex.Message}");
+                Console.WriteLine("  Continuing without restore - semantic model may not resolve all types");
+            }
         }
 
         /// <summary>

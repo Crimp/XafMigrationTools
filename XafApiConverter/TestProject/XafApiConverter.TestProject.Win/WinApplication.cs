@@ -6,7 +6,6 @@ using DevExpress.ExpressApp.Security;
 using DevExpress.ExpressApp.Security.ClientServer;
 using DevExpress.ExpressApp.Win;
 using DevExpress.ExpressApp.Xpo;
-using SecurityDemo.Module;
 
 namespace SecurityDemo.Win
 {
