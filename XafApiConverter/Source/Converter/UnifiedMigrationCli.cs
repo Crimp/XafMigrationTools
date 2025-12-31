@@ -26,7 +26,6 @@ namespace XafApiConverter.Converter {
         // Other options
         public bool CreateBackup { get; set; } = false;
         public bool UseDirectoryPackages { get; set; }
-        public bool ValidateOnly { get; set; }
     }
 
     public class UnifiedMigrationCli {
@@ -94,8 +93,6 @@ namespace XafApiConverter.Converter {
                     // Solution/Directory path
                     case "--solution":
                     case "-s":
-                    case "--path":
-                    case "-p":
                         if (i + 1 < args.Length) {
                             options.SolutionPath = args[++i];
                         }
@@ -158,11 +155,6 @@ namespace XafApiConverter.Converter {
                     case "--directory-packages":
                     case "-dp":
                         options.UseDirectoryPackages = true;
-                        break;
-
-                    case "--validate":
-                    case "-v":
-                        options.ValidateOnly = true;
                         break;
 
                     default:
@@ -673,7 +665,6 @@ Examples:
 
 Common Options:
   -s, --solution <path>     Solution file or directory path
-  -p, --path <path>         Solution file or directory path (alias)
   -tf, --target-framework   Target .NET version (default: net9.0)
                             Examples: net8.0, net9.0, net10.0
   -dx, --dx-version         DevExpress version (default: 25.1.6)
@@ -687,10 +678,6 @@ Type Migration Options:
                             without commenting them out
                             (Useful for manual review mode)
   -m, --show-mappings       Show all type and namespace mappings and exit
-
-Other Options:
-  -v, --validate            Validation mode only (not implemented yet)
-  -h, --help                Show this help message
 
 ");
         }
