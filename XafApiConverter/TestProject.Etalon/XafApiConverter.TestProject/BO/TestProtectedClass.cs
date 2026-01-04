@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Test.Module.BO {
-    // TODO: The 'TestProtectedClass' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
+    // TODO: The 'Test.Module.BO.TestProtectedClass' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:

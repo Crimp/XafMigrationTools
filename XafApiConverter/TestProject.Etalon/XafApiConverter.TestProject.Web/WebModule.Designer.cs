@@ -1,5 +1,5 @@
-﻿namespace SecurityDemo.Module.Web {
-    // TODO: The 'SecurityDemoAspNetModule' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
+namespace SecurityDemo.Module.Web {
+    // TODO: The 'SecurityDemo.Module.Web.SecurityDemoAspNetModule' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:

@@ -573,6 +573,11 @@ namespace XafApiConverter.Converter {
     /// Represents a class with problematic code
     /// </summary>
     internal class ProblematicClass {
+
+        public ProblematicClass() {
+            
+        }
+
         /// <summary>
         /// Simple class name without namespace (e.g., "MyModule")
         /// </summary>

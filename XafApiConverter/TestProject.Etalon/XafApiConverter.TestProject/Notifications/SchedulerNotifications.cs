@@ -1,4 +1,4 @@
-﻿using DevExpress.ExpressApp;
+using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.Actions;
 using DevExpress.ExpressApp.Filtering;
 using DevExpress.ExpressApp.Model;
@@ -21,7 +21,7 @@ namespace FeatureCenter.Module.Notifications {
         public SchedulerNotifications(Session session) : base(session) { }
     }
 
-    // TODO: The 'TaskWithNotifications' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
+    // TODO: The 'FeatureCenter.Module.Notifications.TaskWithNotifications' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:

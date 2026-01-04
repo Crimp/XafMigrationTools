@@ -3,10 +3,10 @@ using DevExpress.Web;
 using System.Collections.Generic;
 
 
-namespace DevExpress.ExpressApp.Web.Demos {
-    public class HintPanel2 : ASPxPanel {
+namespace DevExpress.ExpressApp.Web.Demos_2 {
+    public class HintPanel : ASPxPanel {
         private ASPxLabel label;
-        public HintPanel2() {
+        public HintPanel() {
             Paddings.PaddingBottom = 8;
 
             ASPxPanel innerHintPanel = new ASPxPanel();

@@ -15,6 +15,9 @@ namespace XafApiConverterTests {
             string projectEtalon = ProjectCompareHelper.FindSolutionDirectory("TestProject.Etalon");
             string projectAfterConversion = ProjectCompareHelper.CreateProjectCopy(projectToConvert);
             try {
+                MSBuildLocator.RegisterDefaults();
+                RunFullPipeline(projectAfterConversion);
+                ProjectCompareHelper.CompareProjectFiles(projectEtalon, projectAfterConversion);
                 RunFullPipeline(projectAfterConversion);
                 ProjectCompareHelper.CompareProjectFiles(projectEtalon, projectAfterConversion);
             }
@@ -24,7 +27,6 @@ namespace XafApiConverterTests {
         }
 
         static void RunFullPipeline(string projectDir) {
-            MSBuildLocator.RegisterDefaults();
             string solutionPath = Directory.GetFiles(projectDir, "*.sln", SearchOption.TopDirectoryOnly).First();
             UnifiedMigrationCli.Run(new string[] { "--solution", solutionPath, "security-update", "migrate-types", "project-conversion" });
         }

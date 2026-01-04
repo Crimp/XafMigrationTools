@@ -25,18 +25,18 @@ namespace XafApiConverter.Converter {
             _semanticCache = semanticCache;
         }
 
-        public static string GetTodoClassCommentedComment(string className) {
+        public static string GetTodoClassCommentedComment(string classFullName) {
             var sb = new StringBuilder();
-            sb.AppendLine($"// TODO: The '{className}' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.");
+            sb.AppendLine($"// TODO: The '{classFullName}' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.");
             sb.AppendLine("//       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589");
             sb.AppendLine("//       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET");
             //sb.AppendLine("//       Refer to the migration documentation for guidance on handling such cases.");
             return sb.ToString();
         }
 
-        public static string GetTodoClassWithIssuesComment(string className) {
+        public static string GetTodoClassWithIssuesComment(string classFullName) {
             var sb = new StringBuilder();
-            sb.AppendLine($"// TODO: The '{className}' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.");
+            sb.AppendLine($"// TODO: The '{classFullName}' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.");
             sb.AppendLine("//       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589");
             sb.AppendLine("//       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET");
             //sb.AppendLine("//       Refer to the migration documentation for guidance on handling such cases.");
@@ -51,8 +51,8 @@ namespace XafApiConverter.Converter {
 
             foreach (var problematicClass in _report.ProblematicClasses) {
                 // Skip if already commented (duplicate)
-                if (_commentedClasses.Contains(problematicClass.ClassName) ||
-                    _warningAddedClasses.Contains(problematicClass.ClassName)) {
+                if (_commentedClasses.Contains(problematicClass.FullName) ||
+                    _warningAddedClasses.Contains(problematicClass.FullName)) {
                     continue;
                 }
 
@@ -62,7 +62,7 @@ namespace XafApiConverter.Converter {
                 if (isProtected) {
                     // Protected class: Add warning comment only, do NOT comment out
                     if (AddWarningCommentToProtectedClass(problematicClass.FilePath, problematicClass.ClassName, problematicClass)) {
-                        _warningAddedClasses.Add(problematicClass.ClassName);
+                        _warningAddedClasses.Add(problematicClass.FullName);
                         problematicClass.IsFullyCommented = false;  // ← Class is NOT fully commented!
                         Console.WriteLine($"    [WARNING ADDED] {problematicClass.ClassName} in {Path.GetFileName(problematicClass.FilePath)} (protected class)");
                     }
@@ -76,7 +76,7 @@ namespace XafApiConverter.Converter {
                     problematicClass);
 
                 if (success) {
-                    _commentedClasses.Add(problematicClass.ClassName);
+                    _commentedClasses.Add(problematicClass.FullName);
                     problematicClass.IsFullyCommented = true;  // ← Class IS fully commented!
                     commentedCount++;
 
@@ -164,7 +164,7 @@ namespace XafApiConverter.Converter {
                 var content = File.ReadAllText(filePath);
                 
                 // Check if warning already exists
-                if (HasWarningComment(content, className)) {
+                if (HasWarningComment(content, className, problematicClass.FullName)) {
                     Console.WriteLine($"      [WARNING] Class {className} already has warning comment, skipping");
                     return false;
                 }
@@ -246,17 +246,17 @@ namespace XafApiConverter.Converter {
         /// <summary>
         /// Check if a class already has a warning comment
         /// </summary>
-        private bool HasWarningComment(string content, string className) {
-            var patterns = new[] {
-                $"// TODO: The '{className}' class"
-            };
-
-            // Search in the area before where class might be
-            foreach (var pattern in patterns) {
-                var index = content.IndexOf(pattern, StringComparison.OrdinalIgnoreCase);
-                if (index >= 0) {
-                    return true;
-                }
+        private bool HasWarningComment(string content, string className, string classFullName) {
+            // Check for full name first (most reliable)
+            var fullNamePattern = $"// TODO: The '{classFullName}' class";
+            if (content.Contains(fullNamePattern, StringComparison.OrdinalIgnoreCase)) {
+                return true;
+            }
+            
+            // Fallback: check for simple class name (for backwards compatibility)
+            var simpleNamePattern = $"// TODO: The '{className}' class";
+            if (content.Contains(simpleNamePattern, StringComparison.OrdinalIgnoreCase)) {
+                return true;
             }
 
             return false;
@@ -269,7 +269,7 @@ namespace XafApiConverter.Converter {
             var sb = new StringBuilder();
             
             var prefix = isPartial ? "Partial class" : "Class";
-            sb.AppendLine(GetTodoClassWithIssuesComment(problematicClass.ClassName));
+            sb.AppendLine(GetTodoClassWithIssuesComment(problematicClass.FullName));
             sb.AppendLine($"// NOTE:");
             
             var reasons = problematicClass.Problems
@@ -374,7 +374,7 @@ namespace XafApiConverter.Converter {
                 var content = File.ReadAllText(filePath);
                 
                 // STEP 2: Check if class is already commented out (BEFORE parsing!)
-                if (IsClassAlreadyCommented(content, className)) {
+                if (IsClassAlreadyCommented(content, problematicClass.FullName)) {
                     Console.WriteLine($"      [WARNING] Class {className} appears to be already commented out, skipping");
                     return false;
                 }
@@ -462,7 +462,7 @@ namespace XafApiConverter.Converter {
                             // Process all parts with warnings
                             foreach (var part in partialParts) {
                                 var partContent = File.ReadAllText(part.FilePath);
-                                if (!HasWarningComment(partContent, className)) {
+                                if (!HasWarningComment(partContent, className, problematicClass.FullName)) {
                                     var partTree = CSharpSyntaxTree.ParseText(partContent);
                                     var partRoot = partTree.GetRoot() as CompilationUnitSyntax;
                                     if (partRoot != null) {
@@ -504,7 +504,7 @@ namespace XafApiConverter.Converter {
                             
 
                             // Register in _warningAddedClasses
-                            _warningAddedClasses.Add(className);
+                            _warningAddedClasses.Add(problematicClass.FullName);
                             return false; // Don't comment out, just return false to indicate no commenting happened
                         }
                         
@@ -585,13 +585,13 @@ namespace XafApiConverter.Converter {
                 var content = File.ReadAllText(filePath);
                 
                 // Check if already commented
-                if (IsClassAlreadyCommented(content, className)) {
+                if (IsClassAlreadyCommented(content, problematicClass.FullName)) {
                     Console.WriteLine($"         - {Path.GetFileName(filePath)}: already commented, skipping");
                     return true;
                 }
                 
                 // Check if already has warning comment
-                if (HasWarningComment(content, className)) {
+                if (HasWarningComment(content, className, problematicClass.FullName)) {
                     Console.WriteLine($"         - {Path.GetFileName(filePath)}: already has warning comment, skipping");
                     return true;
                 }
@@ -684,13 +684,27 @@ namespace XafApiConverter.Converter {
         }
         
         /// <summary>
-        /// Check if class is already commented out
+        /// Check if class is already commented out.
+        /// Uses full class name (namespace.classname) for reliable identification.
         /// </summary>
         private bool IsClassAlreadyCommented(string content, string classFullName) {
+            // STEP 1: Check for TODO comment with full class name (most reliable)
+            var todoPattern = $"// TODO: The '{classFullName}' class has been commented out";
+            if (content.Contains(todoPattern, StringComparison.OrdinalIgnoreCase)) {
+                return true;
+            }
+            
+            // STEP 2: Сheck for simple class name only)
             // Extract simple class name from full name (e.g., "MyApp.Models.Message" -> "Message")
             var className = classFullName.Contains('.') 
                 ? classFullName.Substring(classFullName.LastIndexOf('.') + 1)
                 : classFullName;
+            
+            // Extract namespace from full name (e.g., "MyApp.Models.Message" -> "MyApp.Models")
+            string expectedNamespace = null;
+            if (classFullName.Contains('.')) {
+                expectedNamespace = classFullName.Substring(0, classFullName.LastIndexOf('.'));
+            }
             
             // Look for multiple patterns to catch already commented classes:
             // Pattern 1: // ========== COMMENTED OUT CLASS ==========
@@ -750,8 +764,38 @@ namespace XafApiConverter.Converter {
                 
                 foreach (var pattern in patterns) {
                     if (commentedBlock.Contains(pattern, StringComparison.OrdinalIgnoreCase)) {
-                        // Found the specific class in this commented block!
                         return true;
+                        //// Found the specific class in this commented block!
+                        //// NEW: Now verify the namespace matches too
+                        //if (expectedNamespace != null) {
+                        //    // Check if the commented block has the expected namespace
+                        //    // Look for "namespace ExpectedNamespace {" in the block
+                        //    // or in the content before the block (within reasonable distance)
+                            
+                        //    // Search backwards from comment block to find namespace declaration
+                        //    var searchStart = Math.Max(0, commentIndex - 500);
+                        //    var searchRegion = content.Substring(searchStart, commentIndex - searchStart);
+                            
+                        //    // Look for uncommented namespace declaration: "namespace X.Y.Z {"
+                        //    var namespacePattern = $"namespace {expectedNamespace}";
+                        //    if (searchRegion.Contains(namespacePattern, StringComparison.OrdinalIgnoreCase)) {
+                        //        // Found matching namespace - this is the right class!
+                        //        return true;
+                        //    }
+                            
+                        //    // Also check if namespace is commented in the block itself
+                        //    var commentedNamespacePattern = $"// namespace {expectedNamespace}";
+                        //    if (commentedBlock.Contains(commentedNamespacePattern, StringComparison.OrdinalIgnoreCase)) {
+                        //        // Found matching namespace in commented block - this is the right class!
+                        //        return true;
+                        //    }
+                            
+                        //    // Class name matches but namespace doesn't - keep searching
+                        //    break; // Exit pattern loop but continue searching other blocks
+                        //} else {
+                        //    // No expected namespace (global namespace) - class name match is enough
+                        //    return true;
+                        //}
                     }
                 }
                 
@@ -1036,7 +1080,7 @@ namespace XafApiConverter.Converter {
         /// </summary>
         private string BuildClassComment(ProblematicClass problematicClass) {
             var sb = new StringBuilder();
-            sb.AppendLine(GetTodoClassCommentedComment(problematicClass.ClassName));
+            sb.AppendLine(GetTodoClassCommentedComment(problematicClass.FullName));
             sb.AppendLine("// NOTE:");
             
             var reasons = problematicClass.Problems

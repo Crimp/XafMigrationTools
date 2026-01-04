@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using DevExpress.ExpressApp;
@@ -6,7 +6,7 @@ using DevExpress.ExpressApp.Updating;
 
 namespace SecurityDemo.Module.Web
 {
-    // TODO: The 'SecurityDemoAspNetModule' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
+    // TODO: The 'SecurityDemo.Module.Web.SecurityDemoAspNetModule' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
@@ -18,6 +18,10 @@ namespace SecurityDemo.Module.Web
         public SecurityDemoAspNetModule()
         {
             InitializeComponent();
+            DevExpress.ExpressApp.Web.Editors.ASPx.ASPxGridListEditor.AllowFilterControlHierarchy = true;
+            DevExpress.ExpressApp.Web.Editors.ASPx.ASPxGridListEditor.MaxFilterControlHierarchyDepth = 3;
+            DevExpress.ExpressApp.Web.Editors.ASPx.ASPxCriteriaPropertyEditor.AllowFilterControlHierarchyDefault = true;
+            DevExpress.ExpressApp.Web.Editors.ASPx.ASPxCriteriaPropertyEditor.MaxHierarchyDepthDefault = 3;
         }
         public override IEnumerable<ModuleUpdater> GetModuleUpdaters(IObjectSpace objectSpace, Version versionFromDB) {
             return ModuleUpdater.EmptyModuleUpdaters;

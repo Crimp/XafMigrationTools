@@ -310,14 +310,35 @@ namespace XafApiConverterTests.ClassCommenterTests {
 
             // Merge problems for partial classes
             var allProblems = mainProblems.Concat(designerProblems)
-                .GroupBy(pc => pc.ClassName)
-                .Select(g => new ProblematicClass {
-                    ClassName = g.Key,
-                    FilePath = mainFilePath,
-                    Problems = g.SelectMany(pc => pc.Problems)
-                        .GroupBy(p => p.TypeName)
-                        .Select(pg => pg.First())
-                        .ToList()
+                .GroupBy(pc => pc.FullName)
+                .Select(g => {
+                    // Extract ClassName and Namespace from FullName (g.Key)
+                    // Example: "DevExpress.ExpressApp.Web.SecurityDemoAspNetModule" 
+                    //   -> Namespace: "DevExpress.ExpressApp.Web"
+                    //   -> ClassName: "SecurityDemoAspNetModule"
+                    var fullName = g.Key;
+                    string className;
+                    string namespaceName;
+                    
+                    if (fullName.Contains('.')) {
+                        var lastDotIndex = fullName.LastIndexOf('.');
+                        namespaceName = fullName.Substring(0, lastDotIndex);
+                        className = fullName.Substring(lastDotIndex + 1);
+                    } else {
+                        // No namespace (global namespace)
+                        namespaceName = null;
+                        className = fullName;
+                    }
+                    
+                    return new ProblematicClass {
+                        ClassName = className,
+                        Namespace = namespaceName,
+                        FilePath = mainFilePath,
+                        Problems = g.SelectMany(pc => pc.Problems)
+                            .GroupBy(p => p.TypeName)
+                            .Select(pg => pg.First())
+                            .ToList()
+                    };
                 })
                 .Where(pc => pc.Problems.Any(p => p.RequiresCommentOut))
                 .ToList();

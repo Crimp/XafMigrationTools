@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using DevExpress.Xpo;
@@ -9,7 +9,7 @@ using DevExpress.Persistent.Validation;
 using DevExpress.ExpressApp.Model;
 
 namespace FeatureCenter.Module.KeyProperty {
-    // TODO: The 'StringKeyPropertyObject' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
+    // TODO: The 'FeatureCenter.Module.KeyProperty.StringKeyPropertyObject' class has been marked automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:

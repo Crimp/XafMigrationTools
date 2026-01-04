@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using DevExpress.ExpressApp.Editors;
@@ -17,7 +17,7 @@ using DevExpress.ExpressApp.Blazor.Templates;
 using DevExpress.ExpressApp.Blazor;
 
 namespace FeatureCenter.Module.Web.ListEditors {
-    // TODO: The 'ASPxCustomListEditor2' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
+    // TODO: The 'FeatureCenter.Module.Web.ListEditors.ASPxCustomListEditor2' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:

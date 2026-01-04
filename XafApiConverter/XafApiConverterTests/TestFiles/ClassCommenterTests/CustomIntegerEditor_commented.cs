@@ -6,7 +6,7 @@ using FeatureCenter.Module.PropertyEditors;
 using DevExpress.ExpressApp.Model;
 
 namespace FeatureCenter.Module.Web.PropertyEditors {
-    // TODO: The 'CustomIntegerEditor' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
+    // TODO: The 'FeatureCenter.Module.Web.PropertyEditors.CustomIntegerEditor' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
@@ -76,7 +76,7 @@ namespace FeatureCenter.Module.Web.PropertyEditors {
             }
         }
     }
-    // TODO: The 'JSCustomLabelTestControl' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
+    // TODO: The 'FeatureCenter.Module.Web.PropertyEditors.JSCustomLabelTestControl' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
@@ -107,7 +107,7 @@ namespace FeatureCenter.Module.Web.PropertyEditors {
     // ========================================
 
 
-    // TODO: The 'JSCustomDropDownListTestControl' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
+    // TODO: The 'FeatureCenter.Module.Web.PropertyEditors.JSCustomDropDownListTestControl' class has been commented out automatically due to usage of types that have no XAF for .NET equivalent.
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
