@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using DevExpress.Web;
 using System.Collections.Generic;
 
@@ -8,11 +8,11 @@ namespace DevExpress.ExpressApp.Web.Demos {
     //       Breaking Change https://supportcenter.devexpress.com/ticket/details/t1312589
     //       Please review the class and implement necessary changes to ensure compatibility with XAF for .NET
     // NOTE:
-    //   - Class 'ASPxPanel' has no equivalent in XAF for .NET
+    //   - Type 'ASPxPanel' has no equivalent in XAF for .NET
     //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
-    //   - Class 'ASPxLabel' has no equivalent in XAF for .NET
+    //   - Type 'ASPxLabel' has no equivalent in XAF for .NET
     //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
-    //   - Class 'Paddings' has no equivalent in XAF for .NET
+    //   - Type 'Paddings' has no equivalent in XAF for .NET
     //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
     // ========== COMMENTED OUT CLASS ==========
     // public class HintPanel : ASPxPanel {

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.UI;
 using DevExpress.ExpressApp.Blazor;
 using DevExpress.ExpressApp.Blazor.Layout;
@@ -13,7 +13,7 @@ namespace FeatureCenter.Module.Web.Layout {
     //     LayoutItemTemplate has no Blazor equivalent (Web Forms layout specific)
     //   - Type 'DevExpress.ExpressApp.Web.Layout.LayoutItemTemplateContainer' has no equivalent in XAF for .NET
     //     LayoutItemTemplateContainer has no equivalent in XAF for .NET (loaded from removed-api.txt)
-    //   - Class 'ASPxHyperLink' has no equivalent in XAF for .NET
+    //   - Type 'ASPxHyperLink' has no equivalent in XAF for .NET
     //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
     // ========== COMMENTED OUT CLASS ==========
     // public class CustomLayoutItemTemplate : LayoutItemTemplate {
@@ -46,7 +46,7 @@ namespace FeatureCenter.Module.Web.Layout {
     //     LayoutItemTemplateContainerBase has no equivalent in XAF for .NET (loaded from removed-api.txt)
     //   - Type 'DevExpress.ExpressApp.Web.Layout.LayoutGroupTemplateContainer' has no equivalent in XAF for .NET
     //     LayoutGroupTemplateContainer has no equivalent in XAF for .NET (loaded from removed-api.txt)
-    //   - Class 'ASPxRoundPanel' has no equivalent in XAF for .NET
+    //   - Type 'ASPxRoundPanel' has no equivalent in XAF for .NET
     //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
     //   - Type 'DevExpress.ExpressApp.Web.ASPxImageHelper' has no equivalent in XAF for .NET
     //     ASPxImageHelper has no equivalent in XAF for .NET (loaded from removed-api.txt)
@@ -88,11 +88,11 @@ namespace FeatureCenter.Module.Web.Layout {
     // NOTE:
     //   - Type 'DevExpress.ExpressApp.Web.Layout.TabbedGroupTemplate' has no equivalent in XAF for .NET
     //     TabbedGroupTemplate has no Blazor equivalent (Web Forms layout specific)
-    //   - Class 'ASPxPageControl' has no equivalent in XAF for .NET
+    //   - Type 'ASPxPageControl' has no equivalent in XAF for .NET
     //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
     //   - Type 'DevExpress.ExpressApp.Web.Layout.TabbedGroupTemplateContainer' has no equivalent in XAF for .NET
     //     TabbedGroupTemplateContainer has no equivalent in XAF for .NET (loaded from removed-api.txt)
-    //   - Class 'TabPosition' has no equivalent in XAF for .NET
+    //   - Type 'TabPosition' has no equivalent in XAF for .NET
     //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
     // ========== COMMENTED OUT CLASS ==========
     // public class CustomLayoutTabbedGroupTemplate : TabbedGroupTemplate {

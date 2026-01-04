@@ -282,7 +282,18 @@ namespace XafApiConverter.Converter {
                 string containingAssemblyName = typeSymbol.ContainingAssembly?.Name;
                 
                 CheckTypeAgainstMaps(typeName, fullTypeName, containingAssemblyName, problems);
-                return true;
+                
+                // Only return true if we actually found the type in our dictionaries
+                // OR if we have a valid assembly name to check against removed assemblies.
+                // If semantic model resolved to an error symbol (no assembly), return false
+                // to allow fallback to using directives check.
+                if (containingAssemblyName != null || problems.Any()) {
+                    return true;
+                }
+                
+                // Semantic model resolved to error symbol (no assembly, not in dictionaries)
+                // Return false to trigger using directives fallback
+                return false;
             }
             return false;
         }
@@ -352,7 +363,7 @@ namespace XafApiConverter.Converter {
                     problems.Add(new TypeProblem {
                         TypeName = typeName,
                         FullTypeName = fullTypeName,
-                        Reason = $"Class '{typeName}' has no equivalent in XAF for .NET",
+                        Reason = $"Type '{typeName}' has no equivalent in XAF for .NET",
                         Description = $"{assemblyName} assembly was removed in v25.2 or is not supported in XAF for .NET",
                         Severity = ProblemSeverity.Critical,
                         RequiresCommentOut = true
@@ -490,7 +501,11 @@ namespace XafApiConverter.Converter {
 
                         // Use semantic analysis to check if this class uses the target type
                         if(ClassDependsOnType(classDecl, targetClassName, targetFullName, semanticModel)) {
-                            string fullClassName = $"{GetNamespace(classDecl)}.{className}";
+                            // Build full class name, handling global namespace correctly
+                            var classNamespace = GetNamespace(classDecl);
+                            string fullClassName = string.IsNullOrEmpty(classNamespace) 
+                                ? className 
+                                : $"{classNamespace}.{className}";
                             dependents.Add(fullClassName);
                         }
                     }

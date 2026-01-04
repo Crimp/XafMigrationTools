@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using DevExpress.ExpressApp.Editors;
@@ -33,7 +33,7 @@ namespace FeatureCenter.Module.Web.ListEditors {
     //     ImageResourceHttpHandler has no Blazor equivalent (Web Forms specific HTTP handler)
     //   - Type 'DevExpress.ExpressApp.Web.WebImageHelper' has no equivalent in XAF for .NET
     //     WebImageHelper has no equivalent in XAF for .NET (loaded from removed-api.txt)
-    //   - Class 'Paddings' has no equivalent in XAF for .NET
+    //   - Type 'Paddings' has no equivalent in XAF for .NET
     //     DevExpress.Web.v25.1 assembly was removed in v25.2 or is not supported in XAF for .NET
     // ========== COMMENTED OUT CLASS ==========
     // public class ASPxCustomListEditorControl2 : Panel, INamingContainer, IXafCallbackHandler {

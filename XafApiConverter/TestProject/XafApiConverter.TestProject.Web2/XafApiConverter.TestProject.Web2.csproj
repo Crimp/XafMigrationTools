@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ASPNETShowHintController2.cs" />
+    <Compile Include="HintPanel_2.cs" />
     <Compile Include="WebModule.cs">
       <SubType>Component</SubType>
     </Compile>

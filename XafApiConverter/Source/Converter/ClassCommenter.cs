@@ -24,6 +24,15 @@ namespace XafApiConverter.Converter {
             _report = report;
             _semanticCache = semanticCache;
         }
+        
+        /// <summary>
+        /// Build unique key for tracking processed classes: FullName + FilePath.
+        /// This prevents false positives when multiple classes with same name exist in different files,
+        /// especially for classes in global namespace.
+        /// </summary>
+        private static string BuildClassKey(string fullName, string filePath) {
+            return $"{fullName}@{filePath}";
+        }
 
         public static string GetTodoClassCommentedComment(string classFullName) {
             var sb = new StringBuilder();
@@ -50,9 +59,12 @@ namespace XafApiConverter.Converter {
             int commentedCount = 0;
 
             foreach (var problematicClass in _report.ProblematicClasses) {
+                // Build unique key: FullName + FilePath to handle global namespace classes correctly
+                var classKey = BuildClassKey(problematicClass.FullName, problematicClass.FilePath);
+                
                 // Skip if already commented (duplicate)
-                if (_commentedClasses.Contains(problematicClass.FullName) ||
-                    _warningAddedClasses.Contains(problematicClass.FullName)) {
+                if (_commentedClasses.Contains(classKey) ||
+                    _warningAddedClasses.Contains(classKey)) {
                     continue;
                 }
 
@@ -62,7 +74,7 @@ namespace XafApiConverter.Converter {
                 if (isProtected) {
                     // Protected class: Add warning comment only, do NOT comment out
                     if (AddWarningCommentToProtectedClass(problematicClass.FilePath, problematicClass.ClassName, problematicClass)) {
-                        _warningAddedClasses.Add(problematicClass.FullName);
+                        _warningAddedClasses.Add(classKey);
                         problematicClass.IsFullyCommented = false;  // ← Class is NOT fully commented!
                         Console.WriteLine($"    [WARNING ADDED] {problematicClass.ClassName} in {Path.GetFileName(problematicClass.FilePath)} (protected class)");
                     }
@@ -76,7 +88,7 @@ namespace XafApiConverter.Converter {
                     problematicClass);
 
                 if (success) {
-                    _commentedClasses.Add(problematicClass.FullName);
+                    _commentedClasses.Add(classKey);
                     problematicClass.IsFullyCommented = true;  // ← Class IS fully commented!
                     commentedCount++;
 
@@ -270,7 +282,7 @@ namespace XafApiConverter.Converter {
             
             var prefix = isPartial ? "Partial class" : "Class";
             sb.AppendLine(GetTodoClassWithIssuesComment(problematicClass.FullName));
-            sb.AppendLine($"// NOTE:");
+            sb.AppendLine("// NOTE:");
             
             var reasons = problematicClass.Problems
                 .Where(p => p.RequiresCommentOut)
@@ -776,7 +788,7 @@ namespace XafApiConverter.Converter {
                         //    var searchStart = Math.Max(0, commentIndex - 500);
                         //    var searchRegion = content.Substring(searchStart, commentIndex - searchStart);
                             
-                        //    // Look for uncommented namespace declaration: "namespace X.Y.Z {"
+                        //    // Look for uncommented namespace declaration: "namespace {expectedNamespace}";
                         //    var namespacePattern = $"namespace {expectedNamespace}";
                         //    if (searchRegion.Contains(namespacePattern, StringComparison.OrdinalIgnoreCase)) {
                         //        // Found matching namespace - this is the right class!
