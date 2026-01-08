@@ -210,7 +210,7 @@ namespace XafApiConverter.Converter {
                 .ToList();
 
             var hasDevExpressPackages = existingPackages.Any(p => 
-                p.Name.StartsWith("DevExpress.ExpressApp", StringComparison.OrdinalIgnoreCase));
+                p.Name.StartsWith("DevExpress.ExpressApp", StringComparison.OrdinalIgnoreCase) && !p.Name.StartsWith("DevExpress.ExpressApp.CodeAnalysis", StringComparison.OrdinalIgnoreCase));
 
             if (hasDevExpressPackages) {
                 // Project already has DevExpress packages - update versions and migrate Web → Blazor
