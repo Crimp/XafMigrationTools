@@ -17,6 +17,7 @@
     <PackageReference Include="DevExpress.ExpressApp.Security" Version="25.1.6" />
     <PackageReference Include="DevExpress.Persistent.BaseImpl.Xpo" Version="25.1.6" />
     <PackageReference Include="DevExpress.Office.Core" Version="25.1.6" />
+    <PackageReference Include="DevExpress.ExpressApp.Notifications.Blazor" Version="25.1.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XafApiConverter.TestProject\XafApiConverter.TestProject.csproj" />

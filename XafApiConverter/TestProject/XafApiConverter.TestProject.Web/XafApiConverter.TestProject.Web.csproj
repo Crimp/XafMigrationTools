@@ -139,6 +139,8 @@
     <PackageReference Include="DevExpress.ExpressApp.Security" Version="25.1.*-*" />
     <PackageReference Include="DevExpress.Persistent.BaseImpl.Xpo" Version="25.1.*-*" />
     <PackageReference Include="DevExpress.Office.Core" Version="25.1.*-*" />
+    <PackageReference Include="DevExpress.ExpressApp.Notifications.Web" Version="25.1.*-*" />
+    <PackageReference Include="DevExpress.ExpressApp.HtmlPropertyEditor.Web" Version="25.1.*-*" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WebModule.resx">

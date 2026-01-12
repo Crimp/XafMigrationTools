@@ -48,6 +48,11 @@ namespace XafApiConverter.Converter {
                 "DevExpress.ExpressApp.Scheduler.Web",
                 "DevExpress.ExpressApp.Scheduler.Blazor",
                 "Scheduler Web to Blazor migration") },
+
+            { "DevExpress.ExpressApp.Notifications.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.Notifications.Web",
+                "DevExpress.ExpressApp.Notifications.Blazor",
+                "Notifications Web to Blazor migration") },
         };
 
         /// <summary>
@@ -108,6 +113,11 @@ namespace XafApiConverter.Converter {
                 "DevExpress.ExpressApp.Workflow",
                 null,
                 "Workflow has no .NET equivalent - should be removed") },
+
+            { "DevExpress.ExpressApp.HtmlPropertyEditor.Web", new PackageReplacement(
+                "DevExpress.ExpressApp.HtmlPropertyEditor.Web",
+                null,
+                "HtmlPropertyEditor.Web has no .NET equivalent - should be removed") }
         };
 
         /// <summary>
@@ -187,6 +197,12 @@ namespace XafApiConverter.Converter {
                 "DevExpress.ExpressApp.Dashboards.Web",
                 "DevExpress.ExpressApp.Dashboards.Blazor",
                 "Dashboards ASP.NET to Blazor",
+                new[] { ".cs" }) },
+
+            { "DevExpress.ExpressApp.Notifications.Web", new NamespaceReplacement(
+                "DevExpress.ExpressApp.Notifications.Web",
+                "DevExpress.ExpressApp.Notifications.Blazor",
+                "Notifications ASP.NET to Blazor",
                 new[] { ".cs" }) }
         };
 
