@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="DevExpress.CodeParser" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Dashboards.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Office.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.ReportsV2.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Validation.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.FileAttachment.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.Images" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Scheduler.Blazor" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Security" Version="25.1.6" />
+		<PackageReference Include="DevExpress.Persistent.BaseImpl.Xpo" Version="25.1.6" />
+		<PackageReference Include="DevExpress.Office.Core" Version="25.1.6" />
+		<PackageReference Include="DevExpress.ExpressApp.Notifications.Blazor" Version="25.1.6" />
+	</ItemGroup>
+</Project>

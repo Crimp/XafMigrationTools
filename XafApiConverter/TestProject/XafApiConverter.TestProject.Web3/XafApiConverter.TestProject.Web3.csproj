@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="DevExpress.CodeParser" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.Dashboards.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.Maps.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.Office.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.ReportsV2.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.TreeListEditors.Web">
+			<Version>25.1.*-*</Version>
+		</PackageReference>
+		<PackageReference Include="DevExpress.ExpressApp.Validation.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.Chart.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.FileAttachment.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.Images" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.PivotGrid.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.Scheduler.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.Security" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.Persistent.BaseImpl.Xpo" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.Office.Core" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.Notifications.Web" Version="25.1.*-*" />
+		<PackageReference Include="DevExpress.ExpressApp.HtmlPropertyEditor.Web" Version="25.1.*-*" />
+	</ItemGroup>
+</Project>

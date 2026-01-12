@@ -44,16 +44,34 @@ namespace XafApiConverter.Converter {
                 var originalContent = File.ReadAllText(projectPath);
                 var projectDir = Path.GetDirectoryName(projectPath);
 
-                // Step 2: Check if already SDK-style
-                if (IsSdkStyleProject(originalContent)) {
-                    Console.WriteLine($"Project is already SDK-style: {projectPath}");
+                // Step 2: Parse the project file
+                var doc = XDocument.Parse(originalContent);
+
+                // Step 3: Check if already SDK-style
+                bool isSdkStyle = IsSdkStyleProject(originalContent);
+                
+                if (isSdkStyle) {
+                    // SDK-style project - check if needs TargetFramework/package updates
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"Project is already SDK-style, checking for updates...");
+                    Console.ResetColor();
+                    
+                    bool needsUpdate = CheckIfNeedsUpdate(doc, projectPath);
+                    
+                    if (!needsUpdate) {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"✓ Project is already up-to-date: {projectPath}");
+                        Console.ResetColor();
+                        return;
+                    }
+                    
+                    // Update existing SDK-style project
+                    Console.WriteLine("  Updating TargetFramework and packages...");
+                    UpdateSdkStyleProject(doc, projectPath, createBackup);
                     return;
                 }
 
-                // Step 3: Parse the project file
-                var doc = XDocument.Parse(originalContent);
-
-                // Step 4: Analyze project type
+                // Step 4: Analyze project type (legacy .NET Framework project)
                 var projectInfo = AnalyzeProject(doc, projectDir);
 
                 // Step 4.5: Process AssemblyInfo.cs if it has Web-specific attributes
@@ -90,6 +108,169 @@ namespace XafApiConverter.Converter {
 
         private bool IsSdkStyleProject(string content) {
             return content.Contains("<Project Sdk=", StringComparison.OrdinalIgnoreCase);
+        }
+        
+        /// <summary>
+        /// Check if SDK-style project needs TargetFramework or package updates.
+        /// Returns true if:
+        /// - TargetFramework is netstandard* (needs upgrade to net9.0/net9.0-windows)
+        /// - DevExpress packages exist but have wrong version
+        /// - Web packages need migration to Blazor
+        /// </summary>
+        private bool CheckIfNeedsUpdate(XDocument doc, string projectPath) {
+            // Check TargetFramework
+            var targetFramework = ExtractProperty(doc, "TargetFramework");
+            var targetFrameworks = ExtractProperty(doc, "TargetFrameworks"); // multi-targeting
+            
+            var currentTfm = targetFramework ?? targetFrameworks?.Split(';').FirstOrDefault();
+            
+            if (!string.IsNullOrEmpty(currentTfm)) {
+                // Check if it's netstandard or old .NET version
+                if (currentTfm.StartsWith("netstandard", StringComparison.OrdinalIgnoreCase)) {
+                    Console.WriteLine($"    Found TargetFramework: {currentTfm} (needs update to {_config.TargetFramework})");
+                    return true;
+                }
+                
+                // Check if it's old .NET Core/5/6/7/8 version (should upgrade to net9.0)
+                if (currentTfm.StartsWith("netcoreapp", StringComparison.OrdinalIgnoreCase) ||
+                    currentTfm == "net5.0" || currentTfm == "net6.0" || 
+                    currentTfm == "net7.0" || currentTfm == "net8.0") {
+                    Console.WriteLine($"    Found TargetFramework: {currentTfm} (needs update to {_config.TargetFramework})");
+                    return true;
+                }
+            }
+            
+            // Check if DevExpress packages need update or migration
+            var packages = doc.Descendants()
+                .Where(e => e.Name.LocalName == "PackageReference")
+                .Select(e => new {
+                    Name = e.Attribute("Include")?.Value,
+                    Version = e.Attribute("Version")?.Value
+                })
+                .Where(p => !string.IsNullOrEmpty(p.Name))
+                .ToList();
+            
+            foreach (var package in packages) {
+                // Check if Web package needs migration to Blazor
+                if (TypeReplacementMap.TryGetPackageReplacement(package.Name, out var replacement) && 
+                    replacement.HasEquivalent) {
+                    Console.WriteLine($"    Found package that needs migration: {package.Name} → {replacement.NewPackage}");
+                    return true;
+                }
+                
+                // Check if package should be removed
+                if (TypeReplacementMap.ShouldRemovePackage(package.Name)) {
+                    Console.WriteLine($"    Found package that needs removal: {package.Name}");
+                    return true;
+                }
+                
+                // Check if DevExpress package version needs update
+                if (package.Name.StartsWith("DevExpress.", StringComparison.OrdinalIgnoreCase) &&
+                    !string.IsNullOrEmpty(package.Version) &&
+                    package.Version != _config.DxPackageVersion) {
+                    Console.WriteLine($"    Found DevExpress package with old version: {package.Name} {package.Version} (needs {_config.DxPackageVersion})");
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        /// <summary>
+        /// Update existing SDK-style project (TargetFramework and packages)
+        /// </summary>
+        private void UpdateSdkStyleProject(XDocument doc, string projectPath, bool createBackup) {
+            var projectDir = Path.GetDirectoryName(projectPath);
+            var projectInfo = AnalyzeProject(doc, projectDir);
+            
+            bool modified = false;
+            
+            // Update TargetFramework
+            var targetFrameworkElement = doc.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "TargetFramework");
+            
+            if (targetFrameworkElement != null) {
+                var currentTfm = targetFrameworkElement.Value;
+                var newTfm = projectInfo.IsWindowsProject 
+                    ? _config.TargetFrameworkWindows 
+                    : _config.TargetFramework;
+                
+                if (currentTfm != newTfm) {
+                    Console.WriteLine($"    Updating TargetFramework: {currentTfm} → {newTfm}");
+                    targetFrameworkElement.Value = newTfm;
+                    modified = true;
+                }
+            }
+            
+            // Update packages
+            var packageReferences = doc.Descendants()
+                .Where(e => e.Name.LocalName == "PackageReference")
+                .ToList();
+            
+            var packagesToRemove = new List<XElement>();
+            var packagesToUpdate = new Dictionary<XElement, string>(); // element → new package name
+            
+            foreach (var packageRef in packageReferences) {
+                var packageName = packageRef.Attribute("Include")?.Value;
+                if (string.IsNullOrEmpty(packageName)) continue;
+                
+                // Check if package should be removed
+                if (TypeReplacementMap.ShouldRemovePackage(packageName)) {
+                    packagesToRemove.Add(packageRef);
+                    Console.WriteLine($"    Removing: {packageName} (no equivalent)");
+                    modified = true;
+                    continue;
+                }
+                
+                // Check if package needs migration (Web → Blazor)
+                if (TypeReplacementMap.TryGetPackageReplacement(packageName, out var replacement) && 
+                    replacement.HasEquivalent) {
+                    packagesToUpdate[packageRef] = replacement.NewPackage;
+                    Console.WriteLine($"    Migrating: {packageName} → {replacement.NewPackage}");
+                    modified = true;
+                    // Don't continue here - we still need to update version below
+                    packageName = replacement.NewPackage; // Update packageName for version check
+                }
+                
+                // Update DevExpress package version
+                if (packageName.StartsWith("DevExpress.", StringComparison.OrdinalIgnoreCase)) {
+                    var versionAttr = packageRef.Attribute("Version");
+                    if (versionAttr != null && !_config.UseDirectoryPackages) {
+                        if (versionAttr.Value != _config.DxPackageVersion) {
+                            Console.WriteLine($"    Updating version: {packageName} from {versionAttr.Value} to {_config.DxPackageVersion}");
+                            versionAttr.Value = _config.DxPackageVersion;
+                            modified = true;
+                        }
+                    }
+                }
+            }
+            
+            // Apply package removals
+            foreach (var package in packagesToRemove) {
+                package.Remove();
+            }
+            
+            // Apply package migrations (name changes)
+            foreach (var kvp in packagesToUpdate) {
+                kvp.Key.Attribute("Include").Value = kvp.Value;
+            }
+            
+            if (modified) {
+                var backupPath = projectPath + ".backup";
+                if (createBackup) {
+                    File.Copy(projectPath, backupPath, true);
+                    Console.WriteLine($"  Backup created at: {backupPath}");
+                }
+                
+                SaveProject(doc, projectPath);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"✓ Successfully updated: {projectPath}");
+                Console.ResetColor();
+                
+                if (createBackup) {
+                    Console.WriteLine($"  Backup saved to: {backupPath}");
+                }
+            }
         }
 
         private ProjectInfo AnalyzeProject(XDocument doc, string projectDir) {
